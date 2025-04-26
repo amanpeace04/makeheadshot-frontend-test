@@ -1,86 +1,60 @@
+// utils/apiHelper.jsx
 "use client";
+
 import axios from "axios";
 
-// utils/apiHelper.js
-// const BASE_URL = process.env.NEXT_PUBLIC_APP_API_URL;
 const BASE_URL = process.env.NEXT_PUBLIC_APP_API_URL;
 
 const apiHelper = {
-  post: async (url, body) => {
-    //
+  get: async (url, config = {}) => {
     const token = localStorage.getItem("token");
-    const headers = {
+    const defaultHeaders = {
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     };
-    // If the body is FormData, don't set content-type, let the browser set it
+    config.headers = { ...defaultHeaders, ...config.headers };
+
+    const response = await axios.get(`${BASE_URL}${url}`, config);
+    return response.data;
+  },
+
+  post: async (url, body, config = {}) => {
+    const token = localStorage.getItem("token");
+    const defaultHeaders = {
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
+    };
+
+    // if not FormData, set JSON content-type
     if (!(body instanceof FormData)) {
-      headers["Content-Type"] = "application/json";
+      defaultHeaders["Content-Type"] = "application/json";
     }
+    config.headers = { ...defaultHeaders, ...config.headers };
 
-    console.log("POST Request Headers:", headers); // Debugging to check headers
-    console.log("POST Request Body:", body); // Debugging to check body
-
-    try {
-      const response = await axios.post(`${BASE_URL}${url}`, body, { headers });
-      console.log("POST Response:", response); // Debugging response
-      return response.data; // Return only the data
-    } catch (error) {
-      console.error("POST Request Error:", error);
-      throw error.response ? error.response.data : error; // Return error response if available
-    }
+    const response = await axios.post(`${BASE_URL}${url}`, body, config);
+    return response.data;
   },
 
-  get: async (url) => {
+  put: async (url, body, config = {}) => {
     const token = localStorage.getItem("token");
-    const headers = {
+    const defaultHeaders = {
       Authorization: `Bearer ${token}`,
-    };
-    console.log("GET Request Headers:", headers); // Debugging to check headers
-
-    try {
-      const response = await axios.get(`${BASE_URL}${url}`, { headers });
-      console.log("GET Response:", response); // Debugging response
-      return response.data; // Return only the data
-    } catch (error) {
-      console.error("GET Request Error:", error);
-      throw error.response ? error.response.data : error; // Return error response if available
-    }
-  },
-
-  put: async (url, body) => {
-    const token = localStorage.getItem("token");
-    const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     };
-    console.log("PUT Request Headers:", headers); // Debugging to check headers
-    console.log("PUT Request Body:", body); // Debugging to check body
+    config.headers = { ...defaultHeaders, ...config.headers };
 
-    try {
-      const response = await axios.put(`${BASE_URL}${url}`, body, { headers });
-      console.log("PUT Response:", response); // Debugging response
-      return response.data; // Return only the data
-    } catch (error) {
-      console.error("PUT Request Error:", error);
-      throw error.response ? error.response.data : error; // Return error response if available
-    }
+    const response = await axios.put(`${BASE_URL}${url}`, body, config);
+    return response.data;
   },
 
-  delete: async (url) => {
+  delete: async (url, config = {}) => {
     const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    console.log("DELETE Request Headers:", headers); // Debugging to check headers
+    const defaultHeaders = { Authorization: `Bearer ${token}` };
+    config.headers = { ...defaultHeaders, ...config.headers };
 
-    try {
-      const response = await axios.delete(`${BASE_URL}${url}`, { headers });
-      console.log("DELETE Response:", response); // Debugging response
-      return response.data; // Return only the data
-    } catch (error) {
-      console.error("DELETE Request Error:", error);
-      throw error.response ? error.response.data : error; // Return error response if available
-    }
+    const response = await axios.delete(`${BASE_URL}${url}`, config);
+    return response.data;
   },
 };
 

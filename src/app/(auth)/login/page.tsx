@@ -45,7 +45,7 @@ export default function LoginPage() {
       document.cookie = `token=${token}; max-age=${60 * 60 * 24}; path=/`;
 
       toast.success("Logged in successfully!");
-      setTimeout(() => router.push("/"), 800);
+      setTimeout(() => router.push("/user"), 800);
     } catch (err: any) {
       toast.error(err.message || "Login failed");
     } finally {
