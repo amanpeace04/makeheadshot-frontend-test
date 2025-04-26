@@ -53,6 +53,7 @@ export default function PurchaseSection() {
 
   const handleSelectPackage = (pkg: Package) => {
     setChosen(pkg);
+    // Move to validation or directly to payment
     if (validatedFiles.length < REQUIRED_IMAGES) {
       setActiveStep(1);
       setOpenValidator(true);
@@ -62,9 +63,10 @@ export default function PurchaseSection() {
     }
   };
 
-  const onValidated = () => {
+  // Callback from modal; 'success' indicates validation passed
+  const onValidated = (success: boolean) => {
     setOpenValidator(false);
-    if (chosen) {
+    if (success && chosen) {
       setActiveStep(2);
       startPayment(chosen);
     }

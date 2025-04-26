@@ -35,7 +35,8 @@ interface FileItem {
 interface Props {
   open: boolean;
   onClose: () => void;
-  onValidated: () => void;
+  /** callback receives success flag */
+  onValidated: (success: boolean) => void;
   minImages?: number;
   maxImages?: number;
   minFacePercent?: number;
@@ -80,14 +81,19 @@ export default function ImageValidationModal({
     multiple: true,
   });
 
-  // Trigger validation
+  /**
+   * Validate images and notify parent of overall success.
+   */
   const handleValidate = async () => {
     if (items.length < minImages) {
       setError(`Please upload at least ${minImages} images.`);
+      onValidated(false);
       return;
     }
+
     setLoading(true);
     setError(null);
+
     const form = new FormData();
     form.append("min_valid_faces", String(minFacePercent));
     items.forEach((i) => form.append("files", i.file, i.file.name));
@@ -95,17 +101,21 @@ export default function ImageValidationModal({
     try {
       const res = await apiHelper.post<{
         status: string;
-        details: Array<{
-          filename: string;
-          face_percent?: number;
-          error?: string;
-        }>;
+        details?: Array<{ filename: string; face_percent?: number }>;
       }>("/api/validate-faces", form, {
         headers: { "X-API-Key": "supersecret123" },
       });
 
+      // API-level success: all images valid
+      if (res.status === "success") {
+        setValidatedFiles(items.map((i) => i.file));
+        onValidated(true);
+        return;
+      }
+
+      // Partial failure: check each image
       const detailMap: Record<string, boolean> = {};
-      res.details.forEach((d) => {
+      res.details?.forEach((d) => {
         detailMap[d.filename] = (d.face_percent ?? 0) >= minFacePercent;
       });
 
@@ -115,12 +125,15 @@ export default function ImageValidationModal({
       }));
       setItems(updated);
 
-      if (!updated.some((i) => i.status === "invalid")) {
+      // Notify parent if all valid
+      const allValid = updated.every((i) => i.status === "valid");
+      if (allValid) {
         setValidatedFiles(updated.map((i) => i.file));
-        onValidated();
       }
+      onValidated(allValid);
     } catch (e: any) {
       setError(e.message || "Validation failed");
+      onValidated(false);
     } finally {
       setLoading(false);
     }
