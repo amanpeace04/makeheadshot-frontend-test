@@ -1,125 +1,464 @@
-import type React from 'react';
+import React from "react";
+import { CardSpotlight } from "@/components/ui/home/CardSpotlight";
+import { cn } from "@/lib/utils";
 
 const Pricing: React.FC = () => {
-  const pricingPlans = [
-    {
-      id: 1,
-      name: 'Basic',
-      price: '19',
-      features: [
-        '10 AI Headshots',
-        '3 Different Styles',
-        'Professional Background Options',
-        'HD Downloads',
-        'Commercial Usage Rights',
-      ],
-      recommended: false,
-    },
-    {
-      id: 2,
-      name: 'Pro',
-      price: '39',
-      features: [
-        '30 AI Headshots',
-        '8 Different Styles',
-        'Professional Background Options',
-        'HD Downloads',
-        'Commercial Usage Rights',
-        'Priority Processing',
-        'Remove Background Feature',
-      ],
-      recommended: true,
-    },
-    {
-      id: 3,
-      name: 'Business',
-      price: '99',
-      features: [
-        '100 AI Headshots',
-        'All Available Styles',
-        'Professional Background Options',
-        'HD Downloads',
-        'Commercial Usage Rights',
-        'Priority Processing',
-        'Remove Background Feature',
-        'Personal Brand Customization',
-        'Dedicated Support',
-      ],
-      recommended: false,
-    },
-  ];
-
   return (
-    <div id="pricing" className="py-16">
+    <section className="py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Simple, Transparent Pricing</h2>
-          <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            Choose the plan that works best for your needs. No hidden fees, no subscriptions.
-          </p>
-        </div>
+        <h2 className="text-4xl font-bold text-center mb-4 text-corporate-dark">
+          Simple,{" "}
+          <span className="bg-gradient-to-r from-corporate-blue to-corporate-green bg-clip-text text-transparent">
+            transaparent
+          </span>{" "}
+          pricing
+        </h2>
+        <p className="text-xl text-center text-corporate-medium mb-12 max-w-3xl mx-auto">
+          The average cost of professional headshots is $500 in EU and the U.S.
+          Our packages start at just ₹1,490 -{" "}
+          <span className="font-semibold text-corporate-dark">10x cheaper</span>{" "}
+          than traditional options.
+        </p>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {pricingPlans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`relative rounded-lg border ${
-                plan.recommended ? 'border-blue-500' : 'border-gray-200'
-              } bg-white p-6 shadow-md`}
-            >
-              {plan.recommended && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 transform rounded-full bg-blue-500 px-4 py-1 text-sm font-semibold text-white">
-                  Most Popular
-                </div>
-              )}
-              <h3 className="mb-2 text-center text-2xl font-bold text-gray-900">{plan.name}</h3>
-              <div className="mb-6 text-center">
-                <span className="text-4xl font-bold">${plan.price}</span>
-                <span className="text-gray-600"> one-time payment</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {/* Basic Plan */}
+          <CardSpotlight className="rounded-2xl border-2 border-gray-200 bg-white shadow-sm h-full">
+            <div className="p-8 h-full flex flex-col">
+              <h3 className="text-2xl font-bold text-center text-corporate-dark mb-2">
+                Basic
+              </h3>
+              <div className="text-center mb-6">
+                <span className="text-5xl font-bold text-corporate-dark">
+                  ₹1,490
+                </span>
+                <span className="text-corporate-medium">/once</span>
               </div>
-              <ul className="mb-8 space-y-3">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center">
+              <p className="text-center text-corporate-medium mb-6">
+                Perfect for individuals who need professional headshots for
+                their social media profiles.
+              </p>
+              <div className="space-y-4 mb-8 flex-grow">
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="mr-2 h-5 w-5 text-green-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                     </svg>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className={`w-full rounded-full ${
-                  plan.recommended
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                } py-3 font-semibold transition duration-300`}
-              >
-                Get Started
-              </button>
+                  </div>
+                  <span className="text-corporate-medium">50 headshots</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">5 backgrounds</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">5 outfits</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    Choose from 30 styles
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    Delivery within 4 hours
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 text-gray-300 rounded-full p-1"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium text-gray-400">
+                    No custom shoot credits
+                  </span>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <button className="w-full py-3 px-4 bg-gray-100 hover:bg-gradient-to-r hover:from-corporate-blue hover:to-corporate-green text-corporate-dark hover:text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1">
+                  Get started
+                </button>
+              </div>
             </div>
-          ))}
+          </CardSpotlight>
+
+          {/* Professional Plan */}
+          <CardSpotlight className="rounded-2xl border-2 border-corporate-blue bg-white shadow-lg h-full relative z-10">
+            {/* Dual tone gradient background */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-corporate-blue/10 to-corporate-green/10 -z-10"></div>
+
+            <div className="p-8 h-full flex flex-col relative">
+              <h3 className="text-2xl font-bold text-center text-corporate-dark mb-2">
+                Professional
+              </h3>
+              <div className="text-center mb-6">
+                <span className="text-5xl font-bold text-corporate-dark">
+                  ₹2,490
+                </span>
+                <span className="text-corporate-medium">/once</span>
+              </div>
+              <p className="text-center text-corporate-medium mb-6">
+                Perfect for professionals who need versatile headshots for
+                different platforms.
+              </p>
+              <div className="space-y-4 mb-8 flex-grow">
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">100 headshots</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">10 backgrounds</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">10 outfits</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    Choose from 60 styles
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    Delivery within 3 hours
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    10 custom shot credits
+                  </span>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <button className="w-full py-3 px-4 bg-gradient-to-r from-corporate-blue to-corporate-green text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+                  Get started
+                </button>
+              </div>
+            </div>
+          </CardSpotlight>
+
+          {/* Executive Plan */}
+          <CardSpotlight className="rounded-2xl border-2 border-gray-200 bg-white shadow-sm h-full">
+            <div className="p-8 h-full flex flex-col">
+              <h3 className="text-2xl font-bold text-center text-corporate-dark mb-2">
+                Executive
+              </h3>
+              <div className="text-center mb-6">
+                <span className="text-5xl font-bold text-corporate-dark">
+                  ₹4,890
+                </span>
+                <span className="text-corporate-medium">/once</span>
+              </div>
+              <p className="text-center text-corporate-medium mb-6">
+                Perfect for executives and leaders who need premium quality
+                headshots.
+              </p>
+              <div className="space-y-4 mb-8 flex-grow">
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">200 headshots</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">20 backgrounds</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">20 outfits</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    Choose from 100 styles
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    Delivery within 2 hours
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-6 h-6 mr-3">
+                    <svg
+                      className="w-6 h-6 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium">
+                    20 custom shot credits
+                  </span>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <button className="w-full py-3 px-4 bg-gray-100 hover:bg-gradient-to-r hover:from-corporate-blue hover:to-corporate-green text-corporate-dark hover:text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1">
+                  Get started
+                </button>
+              </div>
+            </div>
+          </CardSpotlight>
         </div>
 
-        <div className="mt-12 rounded-lg bg-gray-50 p-6 text-center">
-          <h3 className="mb-4 text-xl font-bold">Need a custom solution?</h3>
-          <p className="mb-6 text-gray-600">
-            Contact us for enterprise pricing or custom requirements for your team.
-          </p>
-          <button className="rounded-full border border-blue-600 bg-transparent px-6 py-2 font-semibold text-blue-600 transition duration-300 hover:bg-blue-50">
-            Contact Sales
-          </button>
+        {/* Enterprise Section */}
+        <div className="mt-16 max-w-6xl mx-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div className="md:col-span-7">
+              <h3 className="text-xl font-bold text-corporate-blue mb-2">
+                Enterprise (Team Solutions)
+              </h3>
+              <p className="text-corporate-medium mb-4 text-sm">
+                Need consistent headshots for your entire team? We offer custom
+                solutions with volume discounts.
+              </p>
+
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
+                <div className="flex items-center">
+                  <div className="min-w-5 h-5 mr-2">
+                    <svg
+                      className="w-5 h-5 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium text-sm">
+                    50 headshots per member
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-5 h-5 mr-2">
+                    <svg
+                      className="w-5 h-5 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium text-sm">
+                    100+ backdrops & outfits
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-5 h-5 mr-2">
+                    <svg
+                      className="w-5 h-5 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium text-sm">
+                    Tailored to brand
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <div className="min-w-5 h-5 mr-2">
+                    <svg
+                      className="w-5 h-5 bg-gradient-to-r from-corporate-blue to-corporate-green rounded-full p-1"
+                      fill="white"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span className="text-corporate-medium text-sm">
+                    Bulk discounts available
+                  </span>
+                </div>
+              </div>
+
+              <a
+                href="#"
+                className="inline-flex items-center justify-center px-6 py-2.5 bg-gradient-to-r from-corporate-blue to-corporate-green text-white rounded-lg font-medium transform hover:-translate-y-1 transition duration-300 text-sm"
+              >
+                Book A Call
+                <svg
+                  className="ml-2 w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            </div>
+
+            <div className="hidden md:block md:col-span-5">
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="text-corporate-medium">5-50 users</span>
+                    <span className="text-green-500 font-medium">10% OFF</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-corporate-medium">50+ users</span>
+                    <span className="text-green-500 font-medium">20% OFF</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-corporate-medium">100+ users</span>
+                    <span className="text-green-500 font-medium">25% OFF</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-corporate-medium">250+ users</span>
+                    <span className="text-green-500 font-medium">30% OFF</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-corporate-medium">500+ users</span>
+                    <span className="text-green-500 font-medium">40% OFF</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,80 +1,121 @@
-import type React from 'react';
+import React from "react";
 
 const Testimonials: React.FC = () => {
   const testimonials = [
     {
       id: 1,
-      name: 'Alex Johnson',
-      role: 'Marketing Director',
-      image: 'https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc',
-      quote: "HeadshotsAI transformed my LinkedIn profile. I received more connection requests and interview offers within the first week of updating my photo.",
+      name: "Patrick Qureshi",
+      role: "Founder Sharewine",
+      image:
+        "https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc",
+      quote:
+        "We went from spending days developing content to generating it in a fraction of the time. The platform's powerful AI makes creating high-quality content quick and easy, allowing us to focus more on strategy and growth.",
     },
     {
       id: 2,
-      name: 'Sarah Chen',
-      role: 'Software Engineer',
-      image: 'https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc',
-      quote: "The quality is incredible! No one believes me when I tell them it was AI-generated. Fast, affordable, and professional results.",
+      name: "Aaron Nosbisch",
+      role: "Founder Brez",
+      image:
+        "https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc",
+      quote:
+        "Creating content used to be a complicated and time-consuming process. HeadshotsAI simplified everything, allowing us to go from concept to finished content in just a few easy steps.",
     },
     {
       id: 3,
-      name: 'Michael Roberts',
-      role: 'Freelance Consultant',
-      image: 'https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc',
-      quote: "As a freelancer, I needed a professional headshot but couldn't justify the cost of a photo session. HeadshotsAI was the perfect solution.",
+      name: "Jamora Crawford",
+      role: "Video strategist Ketchapp",
+      image:
+        "https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc",
+      quote:
+        "Our team struggled with tight deadlines and constant content demands. The new platform sped up our creation process, allowing us to meet deadlines without compromising quality.",
+    },
+    {
+      id: 4,
+      name: "Janno Calitz",
+      role: "Co-founder at Zitlac",
+      image:
+        "https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc",
+      quote: "We got a ROAS of 120%, giving us an unbeatable ROI on ad spend!",
+    },
+    {
+      id: 5,
+      name: "Daniel Kenny",
+      role: "Co-founder Wassabi",
+      image:
+        "https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc",
+      quote:
+        "HeadshotsAI has reduced our cost of content creation by $3,000 and the video generation is much faster.",
+    },
+    {
+      id: 6,
+      name: "Derrick Chen",
+      role: "Co-founder at Xara shilajit",
+      image:
+        "https://res.cloudinary.com/db3xtka1o/image/upload/f_auto/w_300/q_70/tools/tdcr5z6mkpdep1ltioxc",
+      quote:
+        "We can now make UGC videos for under $9 compare to a traditional UGC video that cost around $150.",
     },
   ];
 
   return (
-    <div className="bg-gray-50 py-16">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">What Our Users Say</h2>
-          <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            Professionals around the world trust HeadshotsAI for their headshot needs.
-          </p>
-        </div>
+        <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
+          What{" "}
+          <span className="bg-gradient-to-r from-corporate-blue to-corporate-green bg-clip-text text-transparent">
+            they're
+          </span>{" "}
+          saying
+        </h2>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="rounded-lg bg-white p-6 shadow-md">
-              <div className="mb-4 flex items-center">
+            <div
+              key={testimonial.id}
+              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100"
+            >
+              <div className="flex items-center mb-4">
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
-                  className="mr-4 h-16 w-16 rounded-full object-cover"
+                  className="w-12 h-12 rounded-full object-cover mr-4"
                 />
                 <div>
-                  <h3 className="text-lg font-bold">{testimonial.name}</h3>
-                  <p className="text-gray-600">{testimonial.role}</p>
+                  <h3 className="font-bold text-gray-900">
+                    {testimonial.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm">{testimonial.role}</p>
                 </div>
               </div>
-              <p className="italic text-gray-700">"{testimonial.quote}"</p>
+              <p className="text-gray-700 text-sm">"{testimonial.quote}"</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-12 flex justify-center">
-          <div className="inline-flex items-center rounded-full bg-blue-100 px-6 py-2 text-blue-800">
-            <span className="mr-2 text-lg font-bold">4.9</span>
-            <div className="flex">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <svg
-                  key={star}
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-yellow-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <span className="ml-2">from over 10,000 reviews</span>
-          </div>
+        <div className="mt-12 text-center">
+          <a
+            href="#"
+            className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-gradient-to-r from-corporate-blue to-corporate-green text-white font-semibold transform hover:-translate-y-1 transition duration-400 shadow-md"
+          >
+            Try HeadshotsAI Now
+            <svg
+              className="ml-2 w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </a>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
