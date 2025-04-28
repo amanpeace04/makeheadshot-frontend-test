@@ -33,7 +33,7 @@ export interface PackageCardProps {
 
 const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
   const theme = useTheme();
-  const priceLabel = (pkg.cost / 100).toFixed(0);
+  const priceLabel = pkg.cost.toFixed(0);
   const isProfessional = pkg.package_name.toLowerCase().includes("professional");
 
   return (
