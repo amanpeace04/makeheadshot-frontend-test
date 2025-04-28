@@ -1,4 +1,5 @@
 // src/components/Navbar.tsx
+import Link from "next/link";
 import React from "react";
 
 const Navbar: React.FC = () => {
@@ -51,8 +52,8 @@ const Navbar: React.FC = () => {
           </a>
 
           {/* CTA Button */}
-          <a
-            href="/get-started"
+          <Link
+            href="/login"
             className="
               rounded-lg 
               bg-gradient-to-r from-blue-600 to-emerald-500
@@ -63,7 +64,7 @@ const Navbar: React.FC = () => {
             "
           >
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
     </header>
