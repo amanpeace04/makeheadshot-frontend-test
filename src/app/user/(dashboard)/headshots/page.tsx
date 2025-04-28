@@ -67,7 +67,7 @@ export default function PurchasePage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
         amount: order.amount,
         currency: order.currency,
-        order_id: order.id,
+        order_id: order.order_id,
         name: "Portrait Pal",
         description: pkg.package_name,
         handler: async (razorpayResponse: any) => {
@@ -75,7 +75,9 @@ export default function PurchasePage() {
           const orderId = razorpayResponse.razorpay_order_id;
           const paymentId = razorpayResponse.razorpay_payment_id;
           const signature = razorpayResponse.razorpay_signature;
-
+          console.log("orderId : ", orderId);
+          console.log("paymentId : ", paymentId);
+          console.log("signature : ", signature);
           try {
             await apiHelper.post(
               "/api/payment/verify",

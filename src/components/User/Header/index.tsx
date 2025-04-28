@@ -9,7 +9,6 @@ import { useAuth } from "@/context/AuthContext";
 
 export const Navbar: React.FC = () => {
   const { user } = useAuth();
-  console.log("user from use Auth: ", user);
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);

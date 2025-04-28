@@ -100,7 +100,7 @@ export default function PurchaseSection() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
         amount: order.amount,
         currency: order.currency,
-        order_id: order.id,
+        order_id: order.order_id,
         name: "Portrait Pal",
         description: pkg.package_name,
         handler: async (resp: any) => {
@@ -115,7 +115,7 @@ export default function PurchaseSection() {
             },
             { headers: { "X-API-Key": "supersecret123" } }
           );
-          window.location.href = "/form";
+          // window.location.href = "/form";
         },
       };
 

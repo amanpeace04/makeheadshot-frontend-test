@@ -12,6 +12,7 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Dashboard } from "./Dashboard";
 import { Navbar } from "@/components/User/Header";
+import Image from "next/image";
 // import { Logo, LogoIcon } from "./Logo"; // wherever you put those
 
 interface DashboardLayoutProps {
@@ -52,7 +53,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <div
         className={cn(
           "mx-auto flex w-full flex-1 flex-col overflow-hidden rounded-md border  bg-[#a2c8ee] md:flex-row ",
-          "h-screen"
+          "min-h-screen"
         )}
       >
         <Sidebar open={open} setOpen={setOpen}>
@@ -71,8 +72,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   label: "Manu Arora",
                   href: "#",
                   icon: (
-                    <img
-                      src="https://assets.aceternity.com/manu.png"
+                    <Image
+                      src="./globe.svg"
                       className="h-7 w-7 shrink-0 rounded-full"
                       width={50}
                       height={50}
