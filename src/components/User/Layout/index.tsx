@@ -86,7 +86,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </SidebarBody>
         </Sidebar>
 
-        {/* dashboard “frame” around whatever’s passed in */}
+        {/* dashboard "frame" around whatever's passed in */}
         <Dashboard>{children}</Dashboard>
       </div>
     </>
