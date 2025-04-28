@@ -13,7 +13,16 @@ import img8 from "@/assets/images/1 (8).jpg";
 
 // Create a larger array of images by repeating them
 const createImageArray = (): string[] => {
-  const baseImages: string[] = [img1, img2, img3, img4, img5, img6, img7, img8];
+  const baseImages: string[] = [
+    img1.src, 
+    img2.src, 
+    img3.src, 
+    img4.src, 
+    img5.src, 
+    img6.src, 
+    img7.src, 
+    img8.src
+  ];
   let images: string[] = [];
   // Repeat the base images 5 times to get 40 images
   for (let i = 0; i < 5; i++) {
