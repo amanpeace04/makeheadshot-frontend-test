@@ -1,11 +1,10 @@
-// app/purchase/page.tsx  (or wherever you render it)
 "use client";
 
 import React, { useState } from "react";
 import { Container, Grid, Box, Modal } from "@mui/material";
 import PackagesSection from "@/components//ui/PurchaseSection";
 import { Package } from "@/components/ui/PackageCard";
-import ImageValidationForm from "@/components/ui/ImageValidationModal";
+import ImageValidationModal from "@/components/ui/ImageValidationModal";
 import { useImageValidation } from "@/context/ImageValidationContext";
 import { useAuth } from "@/context/AuthContext";
 import { loadRazorpay } from "@/lib/loadRazorpay";
@@ -19,11 +18,12 @@ export default function PurchasePage() {
 
   const [selectedPkg, setSelectedPkg] = useState<Package | null>(null);
   const [showValidator, setShowValidator] = useState(false);
+  const [validationSuccess, setValidationSuccess] = useState(false);
 
   const onBuy = (pkg: Package) => {
     setSelectedPkg(pkg);
-    // if they’ve already validated images, go straight to payment
-    if (validatedFiles.length >= 10) {
+    // if they've already validated images, go straight to payment
+    if (validatedFiles.length >= 8) { // Updated to match backend requirement
       startPayment(pkg);
     } else {
       // otherwise, show the validation form
@@ -31,9 +31,20 @@ export default function PurchasePage() {
     }
   };
 
-  const onValidated = () => {
-    setShowValidator(false);
-    if (selectedPkg) startPayment(selectedPkg);
+  // FIXED: Modified to not automatically close the modal
+  const onValidated = (success: boolean) => {
+    console.log("Validation result:", success);
+    setValidationSuccess(success);
+    // We no longer automatically close the dialog or proceed to payment
+  };
+
+  // FIXED: Added a new function for proceeding to payment
+  const handleProceedToPayment = () => {
+    // Only close modal and start payment if validation succeeded
+    if (validationSuccess && selectedPkg) {
+      setShowValidator(false);
+      startPayment(selectedPkg);
+    }
   };
 
   const startPayment = async (pkg: Package) => {
@@ -49,6 +60,7 @@ export default function PurchasePage() {
         id: string;
         amount: number;
         currency: string;
+        order_id: string;
       }>(
         "/api/payment/create-order",
         {
@@ -105,6 +117,17 @@ export default function PurchasePage() {
     }
   };
 
+  // FIXED: Modified to prevent automatic closing
+  const handleCloseValidator = () => {
+    // Only allow closing if validation was successful or if user explicitly cancels
+    if (validationSuccess) {
+      setShowValidator(false);
+    } else {
+      console.log("Please complete validation before closing");
+      // Optionally you can show an alert or confirmation dialog here
+    }
+  };
+
   return (
     <Container sx={{ py: 6 }}>
       <Grid container spacing={4} justifyContent="center">
@@ -113,23 +136,14 @@ export default function PurchasePage() {
         />
       </Grid>
 
-      <Modal
+      {/* FIXED: Updated to use a controlled component pattern */}
+      <ImageValidationModal
         open={showValidator}
-        onClose={() => setShowValidator(false)}
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-      >
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            p: 4,
-            borderRadius: 2,
-            maxWidth: 600,
-            width: "90%",
-          }}
-        >
-          <ImageValidationForm onValidated={onValidated} />
-        </Box>
-      </Modal>
+        onClose={handleCloseValidator}
+        onValidated={onValidated}
+        onProceedToPayment={handleProceedToPayment}
+        minImages={8} // Match backend requirement
+      />
     </Container>
   );
 }
