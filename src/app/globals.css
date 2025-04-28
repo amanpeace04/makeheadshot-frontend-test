@@ -170,8 +170,74 @@
     animation: marquee-up 15s ease-in-out infinite alternate;
   }
 
-  /* for your “transform-3d” pseudo‐animation */
+  /* for your "transform-3d" pseudo‐animation */
   .preserve-3d {
     transform-style: preserve-3d;
   }
+}
+
+/* 5) Variables for styled packages component */
+:root {
+  --corporate-blue: #0a66c2; /* Using your corporate blue */
+  --corporate-green: #00a876; /* Using your corporate green */
+  --corporate-dark: #212529;
+  --corporate-medium: #6c757d;
+}
+
+/* Styling for the packages wrapper in dashboard */
+.styled-packages-wrapper {
+  /* Additional container styles if needed */
+}
+
+/* Style for package cards */
+.styled-packages-wrapper .MuiCard-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+/* Special styling for the professional package */
+.styled-packages-wrapper .professional-package {
+  border: 2px solid var(--corporate-blue);
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 4px 20px rgba(10, 102, 194, 0.1);
+}
+
+.styled-packages-wrapper .professional-package::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to right, rgba(10, 102, 194, 0.05), rgba(0, 168, 118, 0.05));
+  z-index: -1;
+}
+
+/* Hover effects for package cards */
+.styled-packages-wrapper .MuiCard-root:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the buy buttons */
+.styled-packages-wrapper button.MuiButton-contained {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+}
+
+/* Professional package button styling */
+.styled-packages-wrapper .professional-package button.MuiButton-contained {
+  background: linear-gradient(to right, var(--corporate-blue), var(--corporate-green));
+  color: white;
+}
+
+/* Button hover effect */
+.styled-packages-wrapper button.MuiButton-contained:hover {
+  background: linear-gradient(to right, var(--corporate-blue), var(--corporate-green));
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
