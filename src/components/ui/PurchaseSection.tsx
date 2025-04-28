@@ -1,4 +1,3 @@
-// File: src/components/ui/PurchaseSection.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -21,7 +20,7 @@ import { useImageValidation } from "@/context/ImageValidationContext";
 import { loadRazorpay } from "@/lib/loadRazorpay";
 
 const steps = ["Select Package", "Validate Images", "Payment"];
-const REQUIRED_IMAGES = 10;
+const REQUIRED_IMAGES = 8; // Updated to match backend requirement
 
 export default function PurchaseSection() {
   const { validatedFiles } = useImageValidation();
@@ -34,6 +33,7 @@ export default function PurchaseSection() {
   const [activeStep, setActiveStep] = useState(0);
   const [chosen, setChosen] = useState<Package | null>(null);
   const [openValidator, setOpenValidator] = useState(false);
+  const [validationSuccess, setValidationSuccess] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -63,10 +63,22 @@ export default function PurchaseSection() {
     }
   };
 
-  // Callback from modal; 'success' indicates validation passed
+  // FIXED: Callback from modal; 'success' indicates validation passed
+  // Now we only update the validation success state but don't close the modal
   const onValidated = (success: boolean) => {
-    setOpenValidator(false);
-    if (success && chosen) {
+    console.log("Image validation result:", success);
+    setValidationSuccess(success);
+    
+    // Only proceed to payment if validation was successful
+    // AND the user clicks "Proceed to Payment" in the modal
+    // We no longer automatically close the modal here
+  };
+
+  // This new function will be called when user clicks "Proceed to Payment" in the modal
+  const handleProceedToPayment = () => {
+    // Close the modal and start payment only if validation was successful
+    if (validationSuccess && chosen) {
+      setOpenValidator(false);
       setActiveStep(2);
       startPayment(chosen);
     }
@@ -124,6 +136,19 @@ export default function PurchaseSection() {
       console.error(err);
       alert("Payment initialization failed");
       setActiveStep(1);
+    }
+  };
+
+  // FIXED: Only close the validator if user explicitly cancels
+  // or if we're not in an active validation process
+  const handleCloseValidator = () => {
+    // If validation was successful, allow closing
+    // If no validation has happened yet, also allow closing
+    if (validationSuccess || !openValidator) {
+      setOpenValidator(false);
+    } else {
+      // Optionally, you could show a confirmation dialog here
+      console.log("Please complete validation or use the Cancel button");
     }
   };
 
@@ -202,10 +227,13 @@ export default function PurchaseSection() {
         </Box>
       )}
 
+      {/* FIXED: Pass the new handleProceedToPayment function */}
       <ImageValidationModal
         open={openValidator}
-        onClose={() => setOpenValidator(false)}
+        onClose={handleCloseValidator}
         onValidated={onValidated}
+        onProceedToPayment={handleProceedToPayment}
+        minImages={REQUIRED_IMAGES}
       />
     </Container>
   );
