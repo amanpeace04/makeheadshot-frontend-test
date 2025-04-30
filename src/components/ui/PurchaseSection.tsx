@@ -68,7 +68,7 @@ export default function PurchaseSection() {
   const onValidated = (success: boolean) => {
     console.log("Image validation result:", success);
     setValidationSuccess(success);
-    
+
     // Only proceed to payment if validation was successful
     // AND the user clicks "Proceed to Payment" in the modal
     // We no longer automatically close the modal here
@@ -127,7 +127,7 @@ export default function PurchaseSection() {
             },
             { headers: { "X-API-Key": "supersecret123" } }
           );
-          // window.location.href = "/form";
+          window.location.href = "/form";
         },
       };
 

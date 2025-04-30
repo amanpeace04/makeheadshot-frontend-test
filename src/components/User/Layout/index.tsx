@@ -29,20 +29,20 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 " />,
     },
     {
-      label: "Profile",
-      href: "/user/profile",
+      label: "Packages",
+      href: "/user/headshots",
       icon: <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 " />,
     },
-    {
-      label: "Settings",
-      href: "#",
-      icon: <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 " />,
-    },
-    {
-      label: "Headshots",
-      href: "/user/headshots",
-      icon: <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 " />,
-    },
+    // {
+    //   label: "Settings",
+    //   href: "#",
+    //   icon: <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 " />,
+    // },
+    // {
+    //   label: "Headshots",
+    //   href: "/user/headshots",
+    //   icon: <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 " />,
+    // },
   ];
 
   const [open, setOpen] = useState(false);

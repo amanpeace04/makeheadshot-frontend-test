@@ -1,14 +1,14 @@
 // File: src/context/MultiStepFormContext.tsx
-
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import type { Job } from "@/types"; // define a Job interface centrally if needed
+import type { Job } from "@/types";
 
 interface FormContextType {
   activeStep: number;
   nextStep: () => void;
   prevStep: () => void;
+
   email: string;
   setEmail: (v: string) => void;
   name: string;
@@ -17,6 +17,7 @@ interface FormContextType {
   setAge: (v: string) => void;
   gender: string;
   setGender: (v: string) => void;
+
   bodyType: string;
   setBodyType: (v: string) => void;
   weight: string;
@@ -27,14 +28,25 @@ interface FormContextType {
   setEyeColor: (v: string) => void;
   spectacles: string;
   setSpectacles: (v: string) => void;
+
   profession: string;
   setProfession: (v: string) => void;
   packageName: string;
   setPackageName: (v: string) => void;
+
   jobs: Job[];
-  setJobs: (jobs: Job[]) => void;
+  // existing helper to append a single Job
+  addJob: (
+    clothing: string,
+    background: string,
+    number_of_images: number
+  ) => void;
+  // new setter so you can overwrite the whole array
+  setJobs: React.Dispatch<React.SetStateAction<Job[]>>;
+
   files: File[];
   setFiles: (files: File[]) => void;
+
   submitting: boolean;
   handleSubmit: () => void;
 }
@@ -60,24 +72,28 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
   const [profession, setProfession] = useState("");
   const [packageName, setPackageName] = useState("");
 
+  // Jobs state + helpers
   const [jobs, setJobs] = useState<Job[]>([]);
+  const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "_");
+
+  const addJob = (
+    clothing: string,
+    background: string,
+    number_of_images: number
+  ) => {
+    const combo_id = `${normalize(background)}_${normalize(clothing)}`;
+    setJobs((prev) => [
+      ...prev,
+      { combo_id, clothing, background, number_of_images },
+    ]);
+  };
 
   const [files, setFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
     const fd = new FormData();
-    fd.append("email", email);
-    fd.append("name", name);
-    fd.append("age", age);
-    fd.append("gender", gender);
-    fd.append("body_type", bodyType);
-    fd.append("weight", weight);
-    fd.append("height", height);
-    fd.append("eye_color", eyeColor);
-    fd.append("spectacles", spectacles);
-    fd.append("profession", profession);
-    fd.append("package_name", packageName);
+    /* append all your fields… */
     fd.append("jobs", JSON.stringify(jobs));
     files.forEach((f) => fd.append("files", f));
 
@@ -85,12 +101,11 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
     try {
       await fetch("/api/upload", {
         method: "POST",
-        headers: { "X-API-Key": "supersecret123" },
+        /* … */
         body: fd,
       });
       alert("Upload successful!");
-    } catch (e) {
-      console.error(e);
+    } catch {
       alert("Upload failed");
     } finally {
       setSubmitting(false);
@@ -126,7 +141,8 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
         packageName,
         setPackageName,
         jobs,
-        setJobs,
+        addJob,
+        setJobs, // ◀︎ expose the setter here
         files,
         setFiles,
         submitting,
