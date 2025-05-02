@@ -4,10 +4,14 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  Grid,
   Card,
+  CardMedia,
   CardContent,
   Typography,
   Button,
+  Dialog,
+  DialogTitle,
   IconButton,
   Paper,
   TextField,
@@ -16,155 +20,258 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useFormContext } from "@/context/MultiStepFormContext";
 import { backdropOptions } from "@/constants/backdropOptions";
+import { clothingOptions } from "@/constants/clothingOptions";
 
-export default function BackgroundSelection() {
+interface BackgroundSelectionProps {
+  /** How many total background→clothing combos are allowed */
+  selectionLimit?: number;
+}
+
+export default function BackgroundSelection({
+  selectionLimit = 10,
+}: BackgroundSelectionProps) {
   const theme = useTheme();
-  const { setJobs } = useFormContext();
-  const [selected, setSelected] = useState<string[]>([]);
+  const { jobs, addJob, setJobs } = useFormContext();
+
+  const [openBg, setOpenBg] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
 
-  // sync into global form context
-  useEffect(() => {
-    setJobs(
-      selected.map((bg) => ({
-        combo_id: bg,
-        background: bg,
-        clothing: "",
-        number_of_images: 0,
-      }))
-    );
-  }, [selected, setJobs]);
-
-  const visible = backdropOptions.filter((o) =>
-    o.label.toLowerCase().includes(filter.toLowerCase())
+  // Filterable list of backdrops
+  const visibleBgs = backdropOptions.filter((b) =>
+    b.label.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const addBackground = (id: string) => setSelected((prev) => [...prev, id]);
-  const removeOne = (index: number) =>
-    setSelected((prev) => prev.filter((_, i) => i !== index));
-  const clearAll = () => setSelected([]);
+  // Add a job and close modal
+  const pickClothing = (clothingId: string) => {
+    if (openBg && jobs.length < selectionLimit) {
+      addJob(clothingId, openBg, 1);
+    }
+    setOpenBg(null);
+  };
+
+  // Remove a combo at index i
+  const removeJobAt = (i: number) => {
+    setJobs(jobs.filter((_, idx) => idx !== i));
+  };
+
+  // Open the clothing-picker if under limit
+  const openClothesFor = (bg: string) => {
+    if (jobs.length < selectionLimit) {
+      setOpenBg(bg);
+    }
+  };
 
   return (
-    <Box sx={{ p: 4 }}>
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-        {/* Available Column */}
-        <div className="flex-1">
-          <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 1 }}>
-            <Typography variant="h6" gutterBottom>
-              Available Backdrops
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder="Search backdrops…"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              sx={{ mb: 3 }}
-            />
-
-            {/* Tailwind grid: 1 col xs, 2 cols sm, 3 cols md+ */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {visible.map((opt) => {
-                const count = selected.filter((id) => id === opt.id).length;
-                const isSelected = count > 0;
-
-                return (
-                  <Card
-                    key={opt.id}
-                    elevation={isSelected ? 8 : 2}
-                    className={`
-                      flex flex-col justify-between
-                      rounded-xl overflow-hidden
-                      border-2 ${
-                        isSelected ? "border-primary-600" : "border-transparent"
-                      }
-                      transition-transform hover:scale-105 hover:shadow-lg
-                      h-full
-                    `}
-                  >
-                    {/* fixed-height image container */}
-                    <div className="w-full h-40 overflow-hidden">
-                      <img
-                        src={opt.src}
-                        alt={opt.label}
-                        className="w-full h-full object-cover object-center"
-                      />
-                    </div>
-
-                    <CardContent className="flex items-center justify-between">
-                      <div>
-                        <Typography noWrap sx={{ fontWeight: 500 }}>
-                          {opt.label}
-                        </Typography>
-                        {isSelected && (
-                          <Typography variant="caption" color="primary">
-                            × {count}
-                          </Typography>
-                        )}
-                      </div>
-                      <Button
-                        size="small"
-                        onClick={() => addBackground(opt.id)}
-                      >
-                        Select +
-                      </Button>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </Paper>
-        </div>
-
-        {/* Selected Column */}
-        <div className="w-full md:w-1/3">
-          <Paper
+    <Box sx={{ p: 4, display: "flex", gap: 4 }}>
+      {/* LEFT: Available Backdrops (3/5 width) */}
+      <Box sx={{ flex: 3 }}>
+        <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 1 }}>
+          <Typography variant="h6" gutterBottom>
+            Available Backdrops
+          </Typography>
+          <TextField
+            fullWidth
+            placeholder="Search backdrops…"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+          <Box
+            component="div"
             sx={{
-              p: 3,
-              borderRadius: 2,
-              boxShadow: 1,
-              maxHeight: 600,
-              overflowY: "auto",
+              display: "grid",
+              gap: 3,
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+              },
             }}
           >
+            {visibleBgs.map((bg) => (
+              <Grid item key={bg.id}>
+                <Card
+                  elevation={2}
+                  sx={{
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    cursor:
+                      jobs.length < selectionLimit ? "pointer" : "not-allowed",
+                    opacity: jobs.length < selectionLimit ? 1 : 0.6,
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform:
+                        jobs.length < selectionLimit
+                          ? "scale(1.03)"
+                          : undefined,
+                      boxShadow:
+                        jobs.length < selectionLimit
+                          ? theme.shadows[6]
+                          : undefined,
+                    },
+                  }}
+                  onClick={() => openClothesFor(bg.id)}
+                >
+                  <CardMedia
+                    component="img"
+                    height={140}
+                    image={bg.src}
+                    alt={bg.label}
+                    sx={{ objectFit: "cover" }}
+                  />
+                  <CardContent>
+                    <Typography noWrap sx={{ fontWeight: 500 }}>
+                      {bg.label}
+                    </Typography>
+                    <Button size="small" sx={{ mt: 1 }}>
+                      Select +
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Box>
+        </Paper>
+      </Box>
+
+      {/* RIGHT: Selected Styles (2/5 width) */}
+      <Box sx={{ flex: 2 }}>
+        <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 1, height: "100%" }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              Selected Styles
+            </Typography>
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 2,
+                bgcolor:
+                  jobs.length >= selectionLimit
+                    ? theme.palette.success.main
+                    : theme.palette.grey[300],
+                color: "#fff",
+                px: 2,
+                py: 0.5,
+                borderRadius: 8,
+                fontSize: "0.875rem",
               }}
             >
-              <Typography variant="h6">Selected ({selected.length})</Typography>
-              <Button size="small" onClick={clearAll}>
-                Clear All
-              </Button>
+              {jobs.length}/{selectionLimit}
             </Box>
+          </Box>
 
-            {selected.map((id, i) => {
-              const opt = backdropOptions.find((o) => o.id === id)!;
-              return (
-                <Box
-                  key={`${id}-${i}`}
+          {jobs.map((job, i) => (
+            <Box
+              key={`${job.combo_id}-${i}`}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: 1,
+                p: 1,
+                border: (t) => `1px solid ${t.palette.grey[300]}`,
+                borderRadius: 1,
+              }}
+            >
+              <Typography noWrap>
+                <strong>{job.background.replace(/_/g, " ")}</strong> →{" "}
+                {job.clothing.replace(/_/g, " ")}
+              </Typography>
+              <IconButton size="small" onClick={() => removeJobAt(i)}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          ))}
+
+          {/* placeholders up to limit */}
+          {Array.from({ length: selectionLimit - jobs.length }).map(
+            (_, idx) => (
+              <Box
+                key={`placeholder-${idx}`}
+                sx={{
+                  mb: 1,
+                  p: 2,
+                  border: (t) => `2px dashed ${t.palette.grey[300]}`,
+                  borderRadius: 1,
+                  color: (t) => t.palette.grey[500],
+                  textAlign: "center",
+                  fontStyle: "italic",
+                }}
+              >
+                Style not yet selected
+              </Box>
+            )
+          )}
+
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={jobs.length < selectionLimit}
+            onClick={() => useFormContext().nextStep()}
+          >
+            Continue
+          </Button>
+        </Paper>
+      </Box>
+
+      {/* Clothing-picker modal */}
+      <Dialog
+        open={!!openBg}
+        onClose={() => setOpenBg(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          Which outfit do you want to wear?
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenBg(null)}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <Box sx={{ px: 3, pb: 3 }}>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            Match your{" "}
+            <strong>
+              {backdropOptions.find((b) => b.id === openBg)?.label}
+            </strong>{" "}
+            background with an outfit you want to wear with.
+          </Typography>
+
+          <Grid container spacing={2}>
+            {clothingOptions.map((c) => (
+              <Grid item xs={12} sm={6} key={`${openBg}-${c.id}`}>
+                <Card
+                  elevation={2}
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mb: 1,
-                    p: 1,
-                    border: `1px solid ${theme.palette.grey[300]}`,
-                    borderRadius: 1,
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    "&:hover": { boxShadow: 6, transform: "scale(1.03)" },
+                    transition: "all 0.3s",
                   }}
+                  onClick={() => pickClothing(c.id)}
                 >
-                  <Typography noWrap>{opt.label}</Typography>
-                  <IconButton size="small" onClick={() => removeOne(i)}>
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              );
-            })}
-          </Paper>
-        </div>
-      </div>
+                  <CardMedia
+                    component="img"
+                    height={120}
+                    image={c.src}
+                    alt={c.label}
+                    sx={{ objectFit: "cover" }}
+                  />
+                  <CardContent sx={{ textAlign: "center" }}>
+                    <Typography noWrap>{c.label}</Typography>
+                    <Button size="small" sx={{ mt: 1 }}>
+                      Select +
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </Dialog>
     </Box>
   );
 }

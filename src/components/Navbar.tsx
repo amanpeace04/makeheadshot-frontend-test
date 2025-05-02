@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
 
           {/* CTA Button */}
           <Link
-            href="/login"
+            href="/user"
             className="
               rounded-lg 
               bg-gradient-to-r from-blue-600 to-emerald-500

@@ -1,6 +1,7 @@
 import React from "react";
 import { CardSpotlight } from "@/components/ui/home/CardSpotlight";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const Pricing: React.FC = () => {
   return (
@@ -118,9 +119,12 @@ const Pricing: React.FC = () => {
                 </div>
               </div>
               <div className="mt-auto">
-                <button className="w-full py-3 px-4 bg-gray-100 hover:bg-gradient-to-r hover:from-corporate-blue hover:to-corporate-green text-corporate-dark hover:text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1">
+                <Link
+                  href="/user"
+                  className="w-full py-3 px-4 bg-gray-100 hover:bg-gradient-to-r hover:from-corporate-blue hover:to-corporate-green text-corporate-dark hover:text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1"
+                >
                   Get started
-                </button>
+                </Link>
               </div>
             </div>
           </CardSpotlight>
@@ -225,9 +229,12 @@ const Pricing: React.FC = () => {
                 </div>
               </div>
               <div className="mt-auto">
-                <button className="w-full py-3 px-4 bg-gradient-to-r from-corporate-blue to-corporate-green text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+                <Link
+                  href="/user"
+                  className="w-full py-3 px-4 bg-gradient-to-r from-corporate-blue to-corporate-green text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+                >
                   Get started
-                </button>
+                </Link>
               </div>
             </div>
           </CardSpotlight>
@@ -329,9 +336,12 @@ const Pricing: React.FC = () => {
                 </div>
               </div>
               <div className="mt-auto">
-                <button className="w-full py-3 px-4 bg-gray-100 hover:bg-gradient-to-r hover:from-corporate-blue hover:to-corporate-green text-corporate-dark hover:text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1">
+                <Link
+                  href="/user"
+                  className="w-full py-3 px-4 bg-gray-100 hover:bg-gradient-to-r hover:from-corporate-blue hover:to-corporate-green text-corporate-dark hover:text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1"
+                >
                   Get started
-                </button>
+                </Link>
               </div>
             </div>
           </CardSpotlight>

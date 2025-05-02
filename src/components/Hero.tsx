@@ -68,7 +68,7 @@ const Hero: React.FC = () => {
 
         {/* CTA with moving hover-border halo */}
         <a
-          href="/get-started"
+          href="/user"
           className="inline-block rounded-lg bg-gradient-to-r from-blue-600 to-emerald-500 px-8 py-3 text-white font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-poppins whitespace-nowrap"
         >
           Make HeadShots →

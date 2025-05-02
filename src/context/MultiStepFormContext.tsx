@@ -1,8 +1,15 @@
 // File: src/context/MultiStepFormContext.tsx
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import type { Job } from "@/types";
+import { useAuth } from "@/context/AuthContext";
 
 interface FormContextType {
   activeStep: number;
@@ -54,6 +61,7 @@ interface FormContextType {
 const FormContext = createContext<FormContextType>({} as FormContextType);
 
 export function MultiStepFormProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
   const [activeStep, setActiveStep] = useState(0);
   const nextStep = () => setActiveStep((s) => s + 1);
   const prevStep = () => setActiveStep((s) => s - 1);
@@ -71,6 +79,15 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
 
   const [profession, setProfession] = useState("");
   const [packageName, setPackageName] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+      setName(user.name);
+      // if you have user.picture_url and want to store it:
+      // setProfilePic(user.picture_url);
+    }
+  }, [user]);
 
   // Jobs state + helpers
   const [jobs, setJobs] = useState<Job[]>([]);

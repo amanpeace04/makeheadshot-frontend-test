@@ -94,7 +94,7 @@ const Testimonials: React.FC = () => {
 
         <div className="mt-12 text-center">
           <a
-            href="#"
+            href="/user"
             className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-gradient-to-r from-corporate-blue to-corporate-green text-white font-semibold transform hover:-translate-y-1 transition duration-400 shadow-md"
           >
             Try HeadshotsAI Now

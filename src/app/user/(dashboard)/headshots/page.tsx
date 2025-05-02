@@ -23,7 +23,8 @@ export default function PurchasePage() {
   const onBuy = (pkg: Package) => {
     setSelectedPkg(pkg);
     // if they've already validated images, go straight to payment
-    if (validatedFiles.length >= 8) { // Updated to match backend requirement
+    if (validatedFiles.length >= 8) {
+      // Updated to match backend requirement
       startPayment(pkg);
     } else {
       // otherwise, show the validation form
@@ -103,7 +104,7 @@ export default function PurchasePage() {
               { headers: { "X-API-Key": "supersecret123" } }
             );
             // success → final form
-            router.push("/form");
+            router.push("/user/headshots/form");
           } catch {
             alert("Payment verification failed.");
           }

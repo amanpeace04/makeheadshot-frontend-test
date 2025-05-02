@@ -8,10 +8,13 @@ interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   const pathname = usePathname();
-  
+
   // Only show packages on the main dashboard page
-  const isMainDashboard = pathname === "/user" || pathname === "/user/dashboard" || pathname === "/user/(dashboard)";
-  
+  const isMainDashboard =
+    pathname === "/user" ||
+    pathname === "/user/dashboard" ||
+    pathname === "/user/(dashboard)";
+
   return (
     <div className="flex flex-1">
       <div className="flex min-h-screen w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700">
@@ -28,7 +31,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ children }) => {
                 Select a package to get started with your professional portraits
               </p>
             </div>
-            
+
             {/* Using the existing PackagesSection component - maintains all original logic */}
             <PackagesSection />
           </div>

@@ -34,7 +34,9 @@ export interface PackageCardProps {
 const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
   const theme = useTheme();
   const priceLabel = pkg.cost.toFixed(0);
-  const isProfessional = pkg.package_name.toLowerCase().includes("professional");
+  const isProfessional = pkg.package_name
+    .toLowerCase()
+    .includes("professional");
 
   return (
     <div className="h-full">
@@ -43,14 +45,12 @@ const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
           {pkg.package_name}
         </h3>
         <div className="text-center mb-6">
-          <span className="text-5xl font-bold text-corporate-dark">
+          <span className="text-5xl md:text-3xl font-bold text-corporate-dark">
             ₹{priceLabel}
           </span>
           <span className="text-corporate-medium">/once</span>
         </div>
-        <p className="text-center text-gray-600 mb-6">
-          {pkg.description}
-        </p>
+        <p className="text-center text-gray-600 mb-6">{pkg.description}</p>
         <div className="space-y-4 mb-8 flex-grow">
           <div className="flex items-center">
             <div className="min-w-6 h-6 mr-3">
@@ -110,7 +110,9 @@ const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
               </svg>
             </div>
-            <span className="text-gray-600">{pkg.delivery_hours}-hour delivery</span>
+            <span className="text-gray-600">
+              {pkg.delivery_hours}-hour delivery
+            </span>
           </div>
           <div className="flex items-center">
             {pkg.custom_credits > 0 ? (
@@ -124,7 +126,9 @@ const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                   </svg>
                 </div>
-                <span className="text-gray-600">{pkg.custom_credits} custom credits</span>
+                <span className="text-gray-600">
+                  {pkg.custom_credits} custom credits
+                </span>
               </>
             ) : (
               <>
@@ -152,18 +156,19 @@ const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
             sx={{
               py: 1.5,
               fontWeight: 600,
-              borderRadius: '8px',
-              background: isProfessional 
-                ? 'linear-gradient(to right, var(--corporate-blue), var(--corporate-green))' 
-                : 'rgba(0, 0, 0, 0.06)',
-              color: isProfessional ? 'white' : 'rgba(0, 0, 0, 0.87)',
-              '&:hover': {
-                background: 'linear-gradient(to right, var(--corporate-blue), var(--corporate-green))',
-                color: 'white',
-                transform: 'translateY(-4px)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+              borderRadius: "8px",
+              background: isProfessional
+                ? "linear-gradient(to right, var(--corporate-blue), var(--corporate-green))"
+                : "rgba(0, 0, 0, 0.06)",
+              color: isProfessional ? "white" : "rgba(0, 0, 0, 0.87)",
+              "&:hover": {
+                background:
+                  "linear-gradient(to right, var(--corporate-blue), var(--corporate-green))",
+                color: "white",
+                transform: "translateY(-4px)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
               },
-              transition: 'all 0.3s ease'
+              transition: "all 0.3s ease",
             }}
             onClick={() => onBuy(pkg)}
           >

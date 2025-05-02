@@ -10,18 +10,19 @@ import img5 from "@/assets/images/1 (5).jpg";
 import img6 from "@/assets/images/1 (6).jpg";
 import img7 from "@/assets/images/1 (7).jpg";
 import img8 from "@/assets/images/1 (8).jpg";
+import Link from "next/link";
 
 // Create a larger array of images by repeating them
 const createImageArray = (): string[] => {
   const baseImages: string[] = [
-    img1.src, 
-    img2.src, 
-    img3.src, 
-    img4.src, 
-    img5.src, 
-    img6.src, 
-    img7.src, 
-    img8.src
+    img1.src,
+    img2.src,
+    img3.src,
+    img4.src,
+    img5.src,
+    img6.src,
+    img7.src,
+    img8.src,
   ];
   let images: string[] = [];
   // Repeat the base images 5 times to get 40 images
@@ -53,8 +54,8 @@ const CTASection: React.FC = () => {
           traditional photoshoot.
         </p>
         <div className="flex justify-center">
-          <a
-            href="#"
+          <Link
+            href="/user"
             className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-emerald-500 px-8 py-3 rounded-lg bg-white text-white font-semibold transition-all hover:bg-gray-100 hover:shadow-lg"
           >
             Get Started
@@ -72,7 +73,7 @@ const CTASection: React.FC = () => {
                 d="M9 5l7 7-7 7"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

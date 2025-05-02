@@ -18,6 +18,7 @@ import apiHelper from "@/helpers/apiHelper";
 import { useAuth } from "@/context/AuthContext";
 import { useImageValidation } from "@/context/ImageValidationContext";
 import { loadRazorpay } from "@/lib/loadRazorpay";
+import { useRouter } from "next/navigation";
 
 const steps = ["Select Package", "Validate Images", "Payment"];
 const REQUIRED_IMAGES = 8; // Updated to match backend requirement
@@ -25,6 +26,7 @@ const REQUIRED_IMAGES = 8; // Updated to match backend requirement
 export default function PurchaseSection() {
   const { validatedFiles } = useImageValidation();
   const { user } = useAuth();
+  const router = useRouter();
 
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
@@ -127,7 +129,7 @@ export default function PurchaseSection() {
             },
             { headers: { "X-API-Key": "supersecret123" } }
           );
-          window.location.href = "/form";
+          router.push("/user/headshots/form");
         },
       };
 
