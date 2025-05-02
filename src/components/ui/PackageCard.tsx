@@ -33,7 +33,7 @@ export interface PackageCardProps {
 
 const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
   const theme = useTheme();
-  const priceLabel = pkg.cost.toFixed(0);
+  const priceLabel = pkg.cost;
   const isProfessional = pkg.package_name
     .toLowerCase()
     .includes("professional");
@@ -46,7 +46,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
         </h3>
         <div className="text-center mb-6">
           <span className="text-5xl md:text-3xl font-bold text-corporate-dark">
-            ₹{priceLabel}
+            ₹{priceLabel / 100}
           </span>
           <span className="text-corporate-medium">/once</span>
         </div>
