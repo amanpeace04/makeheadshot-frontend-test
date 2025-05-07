@@ -24,7 +24,7 @@ const steps = ["Select Package", "Validate Images", "Payment"];
 const REQUIRED_IMAGES = 8; // Updated to match backend requirement
 
 export default function PurchaseSection() {
-  const { validatedFiles } = useImageValidation();
+  const { validatedFiles, setModelName } = useImageValidation();
   const { user } = useAuth();
   const router = useRouter();
 
@@ -87,6 +87,17 @@ export default function PurchaseSection() {
   };
 
   const startPayment = async (pkg: Package) => {
+    // generate model_id: <IST-unix-ts>_<first6Email>_<2-digitRandom>
+    const now = new Date();
+    const utcTs = Math.floor(now.getTime() / 1000);
+    const istOffset = 5.5 * 3600;
+    const istTs = utcTs + istOffset;
+    const first6 = user?.email.substring(0, 6);
+    const rand2 = Math.floor(Math.random() * 100)
+      .toString()
+      .padStart(2, "0");
+    const newModelId = `${istTs}_${first6}_${rand2}`;
+    setModelName(newModelId);
     if (!(await loadRazorpay())) {
       alert("Could not load payment SDK");
       setActiveStep(1);
@@ -101,7 +112,7 @@ export default function PurchaseSection() {
         "/api/payment/create-order",
         {
           user_email: user?.email,
-          model_id: "model_123",
+          model_id: newModelId,
           package_name: pkg.package_name,
           amount: pkg.cost,
           currency: "INR",

@@ -10,11 +10,14 @@ import { useAuth } from "@/context/AuthContext";
 import { loadRazorpay } from "@/lib/loadRazorpay";
 import apiHelper from "@/helpers/apiHelper";
 import { useRouter } from "next/navigation";
+import { useFormContext } from "@/context/MultiStepFormContext";
 
 export default function PurchasePage() {
   const { validatedFiles } = useImageValidation();
   const { user } = useAuth();
   const router = useRouter();
+
+  const { email, setModelId } = useFormContext();
 
   const [selectedPkg, setSelectedPkg] = useState<Package | null>(null);
   const [showValidator, setShowValidator] = useState(false);
@@ -49,6 +52,17 @@ export default function PurchasePage() {
   };
 
   const startPayment = async (pkg: Package) => {
+    // generate model_id: <IST-unix-ts>_<first6Email>_<2-digitRandom>
+    const now = new Date();
+    const utcTs = Math.floor(now.getTime() / 1000);
+    const istOffset = 5.5 * 3600;
+    const istTs = utcTs + istOffset;
+    const first6 = user?.email.substring(0, 6);
+    const rand2 = Math.floor(Math.random() * 100)
+      .toString()
+      .padStart(2, "0");
+    const newModelId = `${istTs}_${first6}_${rand2}`;
+    setModelId(newModelId);
     // 1) load SDK
     if (!(await loadRazorpay())) {
       alert("Failed to load payment SDK");
@@ -66,7 +80,7 @@ export default function PurchasePage() {
         "/api/payment/create-order",
         {
           user_email: user?.email,
-          model_id: "model_123",
+          model_id: newModelId,
           package_name: pkg.package_name,
           amount: pkg.cost,
           currency: "INR",

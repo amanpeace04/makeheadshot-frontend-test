@@ -78,6 +78,13 @@ function InnerForm() {
               sx={{ mb: 2 }}
             />
             <TextField
+              fullWidth
+              label="Age *"
+              value={ctx.age}
+              onChange={(e) => ctx.setAge(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            {/* <TextField
               select
               fullWidth
               label="Age *"
@@ -90,7 +97,7 @@ function InnerForm() {
                   {o}
                 </MenuItem>
               ))}
-            </TextField>
+            </TextField> */}
             <TextField
               select
               fullWidth

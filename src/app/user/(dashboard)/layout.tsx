@@ -3,6 +3,7 @@
 import { DashboardLayout } from "@/components/User/Layout";
 import { AuthProvider } from "@/context/AuthContext";
 import { ImageValidationProvider } from "@/context/ImageValidationContext";
+import { MultiStepFormProvider } from "@/context/MultiStepFormContext";
 
 function RootLayout({
   children,
@@ -12,7 +13,9 @@ function RootLayout({
   return (
     <AuthProvider>
       <ImageValidationProvider>
-        <DashboardLayout>{children}</DashboardLayout>
+        <MultiStepFormProvider>
+          <DashboardLayout>{children}</DashboardLayout>
+        </MultiStepFormProvider>
       </ImageValidationProvider>
     </AuthProvider>
   );

@@ -25,7 +25,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const links = [
     {
       label: "Dashboard",
-      href: "#",
+      href: "/user",
       icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 " />,
     },
     {
@@ -33,16 +33,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       href: "/user/headshots",
       icon: <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 " />,
     },
-    // {
-    //   label: "Settings",
-    //   href: "#",
-    //   icon: <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 " />,
-    // },
-    // {
-    //   label: "Headshots",
-    //   href: "/user/headshots",
-    //   icon: <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 " />,
-    // },
   ];
 
   const [open, setOpen] = useState(false);
@@ -65,23 +55,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   <SidebarLink key={idx} link={link} />
                 ))}
               </div>
-            </div>
-            <div>
-              <SidebarLink
-                link={{
-                  label: "Manu Arora",
-                  href: "#",
-                  icon: (
-                    <Image
-                      src="./globe.svg"
-                      className="h-7 w-7 shrink-0 rounded-full"
-                      width={50}
-                      height={50}
-                      alt="Avatar"
-                    />
-                  ),
-                }}
-              />
             </div>
           </SidebarBody>
         </Sidebar>

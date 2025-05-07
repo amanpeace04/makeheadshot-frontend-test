@@ -10,6 +10,8 @@ import React, {
 } from "react";
 import type { Job } from "@/types";
 import { useAuth } from "@/context/AuthContext";
+import { useImageValidation } from "@/context/ImageValidationContext";
+import apiHelper from "@/helpers/apiHelper";
 
 interface FormContextType {
   activeStep: number;
@@ -41,18 +43,23 @@ interface FormContextType {
   packageName: string;
   setPackageName: (v: string) => void;
 
+  modelId: string;
+  setModelId: (v: string) => void;
+
+  numImages: number;
+  setNumImages: (n: number) => void;
+  totalNumberOutputImages: number;
+  setTotalNumberOutputImages: (n: number) => void;
+
   jobs: Job[];
-  // existing helper to append a single Job
   addJob: (
     clothing: string,
     background: string,
     number_of_images: number
   ) => void;
-  // new setter so you can overwrite the whole array
   setJobs: React.Dispatch<React.SetStateAction<Job[]>>;
 
-  files: File[];
-  setFiles: (files: File[]) => void;
+  validatedFiles: File[];
 
   submitting: boolean;
   handleSubmit: () => void;
@@ -62,37 +69,50 @@ const FormContext = createContext<FormContextType>({} as FormContextType);
 
 export function MultiStepFormProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
+  const { validatedFiles, modelName } = useImageValidation();
+
+  // Step navigation
   const [activeStep, setActiveStep] = useState(0);
   const nextStep = () => setActiveStep((s) => s + 1);
   const prevStep = () => setActiveStep((s) => s - 1);
 
-  const [email, setEmail] = useState("");
+  // Personal info
+  const [email, setEmail] = useState(user?.email);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
 
+  // Physical details
   const [bodyType, setBodyType] = useState("");
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [eyeColor, setEyeColor] = useState("");
   const [spectacles, setSpectacles] = useState("");
 
+  // Professional info
   const [profession, setProfession] = useState("");
-  const [packageName, setPackageName] = useState("");
+  const [_packageName, _setPackageName] = useState("");
+  // AI/Image generation parameters
+  const [numImages, setNumImages] = useState(0);
+  const [totalNumberOutputImages, setTotalNumberOutputImages] = useState(0);
 
+  // wrap the raw setters so we can log
+  const setPackageName = (v: string) => {
+    console.log("⚙️ setPackageName →", v);
+    _setPackageName(v);
+  };
+
+  // Pre-fill from auth
   useEffect(() => {
     if (user) {
       setEmail(user.email);
       setName(user.name);
-      // if you have user.picture_url and want to store it:
-      // setProfilePic(user.picture_url);
     }
   }, [user]);
 
-  // Jobs state + helpers
+  // Jobs state + helper
   const [jobs, setJobs] = useState<Job[]>([]);
   const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "_");
-
   const addJob = (
     clothing: string,
     background: string,
@@ -105,37 +125,57 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
     ]);
   };
 
-  const [files, setFiles] = useState<File[]>([]);
+  // Submission
   const [submitting, setSubmitting] = useState(false);
-
   const handleSubmit = async () => {
+    console.log("modelID :", modelName);
     const fd = new FormData();
-    /* append all your fields… */
+
+    // append all your scalar fields:
+    fd.append("name", name);
+    fd.append("email", user?.email);
+    fd.append("age", age);
+    fd.append("body_type", bodyType);
+    fd.append("weight", weight);
+    fd.append("height", height);
+    fd.append("eye_color", eyeColor);
+    fd.append("spectacles", spectacles);
+    fd.append("gender", gender);
+    fd.append("profession", profession);
+    fd.append("package_name", _packageName);
+    fd.append("model_id", modelName);
+
+    // append the derived counts:
+    fd.append("user_input_images_count", validatedFiles.length.toString());
+    fd.append("total_number_output_images", totalNumberOutputImages.toString());
+    fd.append("num_images", numImages.toString());
+
+    // append jobs array:
     fd.append("jobs", JSON.stringify(jobs));
-    files.forEach((f) => fd.append("files", f));
+
+    // append each file:
+    validatedFiles.forEach((f) => fd.append("files", f));
 
     setSubmitting(true);
     try {
-      await fetch("/api/upload", {
-        method: "POST",
-        /* … */
-        body: fd,
+      // <-- Here is the fix: send `fd` directly, not `{ body: fd }`
+      await apiHelper.post("/api/upload", fd, {
+        headers: { "X-API-Key": "supersecret123" },
       });
       alert("Upload successful!");
-    } catch {
+    } catch (err) {
+      console.error("Upload error:", err);
       alert("Upload failed");
     } finally {
       setSubmitting(false);
     }
   };
-
   return (
     <FormContext.Provider
       value={{
         activeStep,
         nextStep,
         prevStep,
-        email,
         setEmail,
         name,
         setName,
@@ -155,13 +195,18 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
         setSpectacles,
         profession,
         setProfession,
-        packageName,
+        packageName: _packageName,
+
         setPackageName,
+
+        numImages,
+        setNumImages,
+        totalNumberOutputImages,
+        setTotalNumberOutputImages,
         jobs,
         addJob,
-        setJobs, // ◀︎ expose the setter here
-        files,
-        setFiles,
+        setJobs,
+        validatedFiles,
         submitting,
         handleSubmit,
       }}
