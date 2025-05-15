@@ -1,13 +1,12 @@
 // File: src/components/ui/MultiStepForm.tsx
 
 "use client";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Card,
   CardContent,
+  CircularProgress,
   Container,
   MenuItem,
   Paper,
@@ -19,181 +18,209 @@ import {
   useTheme,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
+import apiHelper from "@/helpers/apiHelper";
 import {
   ageOptions,
   genderOptions,
   bodyTypeOptions,
   eyeColorOptions,
   spectaclesOptions,
+  packageOptions,
 } from "@/constants/dropdownOptions";
 import {
   MultiStepFormProvider,
   useFormContext,
 } from "@/context/MultiStepFormContext";
+import { useImageValidation } from "@/context/ImageValidationContext";
 
-import BackgroundSelection from "@/components/ui/BackgroundSelection";
-import SelectedCombinations from "@/components/ui/SelectedCombinations";
-import FinalPreview from "@/components/ui/FinalPreview";
-const steps = [
-  "Personal Info",
-  "Physical Details",
-  "Select Backgrounds",
-  "Review Selections",
-  "Finalize & Submit", // new last step
-];
+const steps = ["Personal Info", "Physical Details", "Professional & Package"];
+interface PaymentValidateResponse {
+  payment_found: boolean;
+  payment_status: "pending" | "paid" | "failed";
+  package_name: string;
+  payment_id: string;
+  amount: number;
+  currency: string;
+  created_at: string;
+  updated_at: string;
+}
 
 function InnerForm() {
   const ctx = useFormContext();
   const theme = useTheme();
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      {/* Step 0: Personal Info */}
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {ctx.activeStep === 0 && (
         <CardContent>
-          {/* Header */}
-          <Box sx={{ mb: 3, textAlign: "center" }}>
-            <Typography variant="h4" sx={{ fontWeight: 600 }}>
-              Add your personal info
-            </Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-              This information helps our AI create headshots that look like you.
-              It will be deleted after your headshots are completed.
-            </Typography>
-          </Box>
-
-          <Box component={Card} sx={{ p: 3, borderRadius: 2, boxShadow: 1 }}>
-            <TextField
-              fullWidth
-              label="Email *"
-              value={ctx.email}
-              onChange={(e) => ctx.setEmail(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Name *"
-              value={ctx.name}
-              onChange={(e) => ctx.setName(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Age *"
-              value={ctx.age}
-              onChange={(e) => ctx.setAge(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            {/* <TextField
-              select
-              fullWidth
-              label="Age *"
-              value={ctx.age}
-              onChange={(e) => ctx.setAge(e.target.value)}
-              sx={{ mb: 2 }}
-            >
-              {ageOptions.map((o) => (
-                <MenuItem key={o} value={o}>
-                  {o}
-                </MenuItem>
-              ))}
-            </TextField> */}
-            <TextField
-              select
-              fullWidth
-              label="Gender *"
-              value={ctx.gender}
-              onChange={(e) => ctx.setGender(e.target.value)}
-            >
-              {genderOptions.map((o) => (
-                <MenuItem key={o} value={o}>
-                  {o}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Box>
+          <TextField
+            fullWidth
+            label="Email *"
+            value={ctx.email}
+            onChange={(e) => ctx.setEmail(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Name *"
+            value={ctx.name}
+            onChange={(e) => ctx.setName(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            select
+            fullWidth
+            label="Age *"
+            value={ctx.age}
+            onChange={(e) => ctx.setAge(e.target.value)}
+            sx={{ mb: 2 }}
+          >
+            {ageOptions.map((o) => (
+              <MenuItem key={o} value={o}>
+                {o}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            select
+            fullWidth
+            label="Gender *"
+            value={ctx.gender}
+            onChange={(e) => ctx.setGender(e.target.value)}
+          >
+            {genderOptions.map((o) => (
+              <MenuItem key={o} value={o}>
+                {o}
+              </MenuItem>
+            ))}
+          </TextField>
         </CardContent>
       )}
-      {/* Step 1: Physical Details */}
+
       {ctx.activeStep === 1 && (
         <CardContent>
-          <Box component={Card} sx={{ p: 3, borderRadius: 2, boxShadow: 1 }}>
+          <TextField
+            select
+            fullWidth
+            label="Body Type *"
+            value={ctx.bodyType}
+            onChange={(e) => ctx.setBodyType(e.target.value)}
+            sx={{ mb: 2 }}
+          >
+            {bodyTypeOptions.map((o) => (
+              <MenuItem key={o} value={o}>
+                {o}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+            <TextField
+              fullWidth
+              type="number"
+              label="Weight (kg) *"
+              value={ctx.weight}
+              onChange={(e) => ctx.setWeight(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              type="number"
+              label="Height (cm) *"
+              value={ctx.height}
+              onChange={(e) => ctx.setHeight(e.target.value)}
+            />
+          </Box>
+
+          <Box sx={{ display: "flex", gap: 2 }}>
             <TextField
               select
               fullWidth
-              label="Body Type *"
-              value={ctx.bodyType}
-              onChange={(e) => ctx.setBodyType(e.target.value)}
+              label="Eye Color *"
+              value={ctx.eyeColor}
+              onChange={(e) => ctx.setEyeColor(e.target.value)}
               sx={{ mb: 2 }}
             >
-              {bodyTypeOptions.map((o) => (
+              {eyeColorOptions.map((o) => (
                 <MenuItem key={o} value={o}>
                   {o}
                 </MenuItem>
               ))}
             </TextField>
-
-            <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-              <TextField
-                fullWidth
-                type="number"
-                label="Weight (kg) *"
-                value={ctx.weight}
-                onChange={(e) => ctx.setWeight(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                type="number"
-                label="Height (cm) *"
-                value={ctx.height}
-                onChange={(e) => ctx.setHeight(e.target.value)}
-              />
-            </Box>
-
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
-                select
-                fullWidth
-                label="Eye Color *"
-                value={ctx.eyeColor}
-                onChange={(e) => ctx.setEyeColor(e.target.value)}
-                sx={{ mb: 2 }}
-              >
-                {eyeColorOptions.map((o) => (
-                  <MenuItem key={o} value={o}>
-                    {o}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                select
-                fullWidth
-                label="Spectacles *"
-                value={ctx.spectacles}
-                onChange={(e) => ctx.setSpectacles(e.target.value)}
-              >
-                {spectaclesOptions.map((o) => (
-                  <MenuItem key={o} value={o}>
-                    {o}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
+            <TextField
+              select
+              fullWidth
+              label="Spectacles *"
+              value={ctx.spectacles}
+              onChange={(e) => ctx.setSpectacles(e.target.value)}
+            >
+              {spectaclesOptions.map((o) => (
+                <MenuItem key={o} value={o}>
+                  {o}
+                </MenuItem>
+              ))}
+            </TextField>
           </Box>
         </CardContent>
       )}
-      {/* Step 3: Review Selections */}+{" "}
-      {ctx.activeStep === 3 && <SelectedCombinations />}
-      {/* Step 2: Select Backgrounds */}
-      {ctx.activeStep === 2 && <BackgroundSelection />}
-      {ctx.activeStep === steps.length - 1 && <FinalPreview />}
-      {/* Navigation */}
+
+      {ctx.activeStep === 2 && (
+        <CardContent>
+          <TextField
+            fullWidth
+            label="Profession *"
+            value={ctx.profession}
+            onChange={(e) => ctx.setProfession(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            select
+            fullWidth
+            label="Package *"
+            value={ctx.packageName}
+            onChange={(e) => ctx.setPackageName(e.target.value)}
+            sx={{ mb: 2 }}
+          >
+            {packageOptions.map((o) => (
+              <MenuItem key={o} value={o}>
+                {o}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <TextField
+              fullWidth
+              type="number"
+              label="# Input Images *"
+              value={ctx.userInputImagesCount}
+              onChange={(e) => ctx.setUserInputImagesCount(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              type="number"
+              label="Total Output Images *"
+              value={ctx.totalNumberOutputImages}
+              onChange={(e) => ctx.setTotalNumberOutputImages(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              type="number"
+              label="# Images to Generate *"
+              value={ctx.numImages}
+              onChange={(e) => ctx.setNumImages(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+          </Box>
+        </CardContent>
+      )}
+
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           px: 3,
-          pt: 2,
+          pb: 3,
         }}
       >
         <Button disabled={ctx.activeStep === 0} onClick={ctx.prevStep}>
@@ -229,7 +256,85 @@ function InnerForm() {
 }
 
 function FormContent() {
-  const { activeStep } = useFormContext();
+  const ctx = useFormContext();
+  const { email } = ctx;
+  const { modelName } = useImageValidation();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // don’t fire until both are set
+    if (!email || !modelName) return;
+
+    setLoading(true);
+    apiHelper
+      .get<PaymentValidateResponse>(
+        `/api/payment/validate?email_id=${encodeURIComponent(
+          email
+        )}&model_id=${encodeURIComponent(modelName)}`
+      )
+      .then((res) => {
+        if (res.payment_found) {
+          // everything’s good; clear any error
+          setError(null);
+          // you can also stash the response into state here if you need it
+        } else {
+          setError("No payment record found. Please contact support.");
+        }
+      })
+      .catch((e: any) => {
+        setError(e.message || "Network error during validation.");
+      })
+      .finally(() => {
+        // always clear the loader once the call completes
+        setLoading(false);
+      });
+  }, [email, modelName]);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "#f5f7fa",
+        }}
+      >
+        <CircularProgress size={64} />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "#f5f7fa",
+          p: 2,
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6" color="error" gutterBottom>
+          {error}
+        </Typography>
+        <Button variant="contained" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </Box>
+    );
+  }
+
+  // all good → show form
   return (
     <Container
       maxWidth="md"
@@ -261,7 +366,7 @@ function FormContent() {
         </Box>
 
         {/* Stepper */}
-        <Stepper activeStep={activeStep} alternativeLabel sx={{ my: 3 }}>
+        <Stepper activeStep={ctx.activeStep} alternativeLabel sx={{ my: 3 }}>
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
@@ -272,7 +377,7 @@ function FormContent() {
         {/* Animated Content */}
         <AnimatePresence exitBeforeEnter>
           <motion.div
-            key={activeStep}
+            key={ctx.activeStep}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}

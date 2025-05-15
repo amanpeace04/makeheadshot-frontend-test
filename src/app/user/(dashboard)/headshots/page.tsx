@@ -17,7 +17,7 @@ export default function PurchasePage() {
   const { user } = useAuth();
   const router = useRouter();
 
-  const { email, setModelId } = useFormContext();
+  const { setModelId } = useFormContext();
 
   const [selectedPkg, setSelectedPkg] = useState<Package | null>(null);
   const [showValidator, setShowValidator] = useState(false);
@@ -85,8 +85,8 @@ export default function PurchasePage() {
           amount: pkg.cost,
           currency: "INR",
           payment_mode: "razorpay",
-        },
-        { headers: { "X-API-Key": "supersecret123" } }
+        }
+        // { headers: { "X-API-Key": "supersecret123" } }
       );
 
       // 3) open checkout
@@ -114,8 +114,8 @@ export default function PurchasePage() {
                 order_id: orderId,
                 payment_id: paymentId,
                 signature,
-              },
-              { headers: { "X-API-Key": "supersecret123" } }
+              }
+              // { headers: { "X-API-Key": "supersecret123" } }
             );
             // success → final form
             router.push("/user/headshots/form");

@@ -77,7 +77,7 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
   const prevStep = () => setActiveStep((s) => s - 1);
 
   // Personal info
-  const [email, setEmail] = useState(user?.email);
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
@@ -105,7 +105,10 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
   // Pre-fill from auth
   useEffect(() => {
     if (user) {
+      console.log("user from context is :  ", user);
       setEmail(user.email);
+      console.log("user from context is :  ", user.email);
+
       setName(user.name);
     }
   }, [user]);
@@ -133,7 +136,7 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
 
     // append all your scalar fields:
     fd.append("name", name);
-    fd.append("email", user?.email);
+    fd.append("email", email);
     fd.append("age", age);
     fd.append("body_type", bodyType);
     fd.append("weight", weight);
@@ -160,7 +163,7 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
     try {
       // <-- Here is the fix: send `fd` directly, not `{ body: fd }`
       await apiHelper.post("/api/upload", fd, {
-        headers: { "X-API-Key": "supersecret123" },
+        // headers: { "X-API-Key": "supersecret123" },
       });
       alert("Upload successful!");
     } catch (err) {
@@ -177,6 +180,7 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
         nextStep,
         prevStep,
         setEmail,
+        email,
         name,
         setName,
         age,

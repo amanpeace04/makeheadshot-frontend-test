@@ -1,15 +1,17 @@
-// utils/apiHelper.jsx
+// File: src/utils/apiHelper.jsx
 "use client";
 
 import axios from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_API_URL;
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY; // set this in your .env.local
 
 const apiHelper = {
   get: async (url, config = {}) => {
     const token = localStorage.getItem("token");
     const defaultHeaders = {
       Authorization: `Bearer ${token}`,
+      "X-API-Key": API_KEY,
       "ngrok-skip-browser-warning": "true",
     };
     config.headers = { ...defaultHeaders, ...config.headers };
@@ -22,10 +24,11 @@ const apiHelper = {
     const token = localStorage.getItem("token");
     const defaultHeaders = {
       Authorization: `Bearer ${token}`,
+      "X-API-Key": API_KEY,
       "ngrok-skip-browser-warning": "true",
     };
 
-    // if not FormData, set JSON content-type
+    // only set content-type if we're not sending FormData
     if (!(body instanceof FormData)) {
       defaultHeaders["Content-Type"] = "application/json";
     }
@@ -39,6 +42,7 @@ const apiHelper = {
     const token = localStorage.getItem("token");
     const defaultHeaders = {
       Authorization: `Bearer ${token}`,
+      "X-API-Key": API_KEY,
       "Content-Type": "application/json",
       "ngrok-skip-browser-warning": "true",
     };
@@ -50,7 +54,10 @@ const apiHelper = {
 
   delete: async (url, config = {}) => {
     const token = localStorage.getItem("token");
-    const defaultHeaders = { Authorization: `Bearer ${token}` };
+    const defaultHeaders = {
+      Authorization: `Bearer ${token}`,
+      "X-API-Key": API_KEY,
+    };
     config.headers = { ...defaultHeaders, ...config.headers };
 
     const response = await axios.delete(`${BASE_URL}${url}`, config);

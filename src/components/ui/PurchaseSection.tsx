@@ -41,8 +41,8 @@ export default function PurchaseSection() {
     (async () => {
       try {
         const { packages } = await apiHelper.get<{ packages: Package[] }>(
-          "/api/packages",
-          { headers: { "X-API-Key": "supersecret123" } }
+          "/api/packages"
+          // { headers: { "X-API-Key": "supersecret123" } }
         );
         setPackages(packages);
       } catch (err: any) {
@@ -97,6 +97,7 @@ export default function PurchaseSection() {
       .toString()
       .padStart(2, "0");
     const newModelId = `${istTs}_${first6}_${rand2}`;
+    console.log("new model id ", newModelId);
     setModelName(newModelId);
     if (!(await loadRazorpay())) {
       alert("Could not load payment SDK");
@@ -117,8 +118,8 @@ export default function PurchaseSection() {
           amount: pkg.cost,
           currency: "INR",
           payment_mode: "razorpay",
-        },
-        { headers: { "X-API-Key": "supersecret123" } }
+        }
+        // { headers: { "X-API-Key": "supersecret123" } }
       );
 
       const options: any = {
@@ -137,8 +138,8 @@ export default function PurchaseSection() {
               order_id: resp.razorpay_order_id,
               payment_id: resp.razorpay_payment_id,
               signature: resp.razorpay_signature,
-            },
-            { headers: { "X-API-Key": "supersecret123" } }
+            }
+            // { headers: { "X-API-Key": "supersecret123" } }
           );
           router.push("/user/headshots/form");
         },
