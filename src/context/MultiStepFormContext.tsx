@@ -12,6 +12,7 @@ import type { Job } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 import { useImageValidation } from "@/context/ImageValidationContext";
 import apiHelper from "@/helpers/apiHelper";
+import { useRouter } from "next/navigation";
 
 interface FormContextType {
   activeStep: number;
@@ -69,7 +70,7 @@ const FormContext = createContext<FormContextType>({} as FormContextType);
 
 export function MultiStepFormProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  const { validatedFiles, modelName } = useImageValidation();
+  const { validatedFiles, modelName, setValidatedFiles } = useImageValidation();
 
   // Step navigation
   const [activeStep, setActiveStep] = useState(0);
@@ -88,6 +89,8 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
   const [height, setHeight] = useState("");
   const [eyeColor, setEyeColor] = useState("");
   const [spectacles, setSpectacles] = useState("");
+
+  const router = useRouter();
 
   // Professional info
   const [profession, setProfession] = useState("");
@@ -166,6 +169,25 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
         // headers: { "X-API-Key": "supersecret123" },
       });
       alert("Upload successful!");
+      // ─── reset all form data ─────────────────────────
+      setActiveStep(0);
+      setEmail("");
+      setName("");
+      setAge("");
+      setGender("");
+      setBodyType("");
+      setWeight("");
+      setHeight("");
+      setEyeColor("");
+      setSpectacles("");
+      setProfession("");
+      _setPackageName("");
+      setNumImages(0);
+      setTotalNumberOutputImages(0);
+      setJobs([]);
+      setValidatedFiles([]);
+      // ─── redirect on success ────────────────────────
+      router.push("/user");
     } catch (err) {
       console.error("Upload error:", err);
       alert("Upload failed");

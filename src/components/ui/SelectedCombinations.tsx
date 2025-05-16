@@ -55,10 +55,6 @@ export default function SelectedCombinations() {
           </Box>
         ))}
       </Paper>
-
-      <Button variant="contained" onClick={nextStep}>
-        Continue
-      </Button>
     </Box>
   );
 }

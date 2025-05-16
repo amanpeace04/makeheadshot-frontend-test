@@ -210,7 +210,6 @@ export default function ImageValidationModal({
             {minFacePercent}% face area)
           </Typography>
         </DialogTitle>
-
         <DialogContent dividers>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -352,7 +351,6 @@ export default function ImageValidationModal({
             })}
           </Grid>
         </DialogContent>
-
         <DialogActions sx={{ px: 3, py: 2 }}>
           <Button
             onClick={() => setItems([])}
@@ -369,16 +367,44 @@ export default function ImageValidationModal({
             Cancel
           </Button>
 
-          {success && validCount >= minImages ? (
+          {onProceedToPayment ? (
+            // ─── Multi-step form flow ──────────────────────────────
+            success && validCount >= minImages ? (
+              <Button
+                variant="contained"
+                onClick={onProceedToPayment}
+                sx={{
+                  background: "linear-gradient(to right, #1e4d8c, #00a99d)",
+                  color: "white",
+                }}
+              >
+                Proceed to Payment
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={handleVerify}
+                disabled={!modelsLoaded || loading || nonDupCount < minImages}
+                startIcon={loading ? <CircularProgress size={20} /> : null}
+              >
+                {!modelsLoaded
+                  ? "Loading models…"
+                  : loading
+                  ? "Verifying…"
+                  : "Verify Images"}
+              </Button>
+            )
+          ) : // ─── FinalPreview flow ─────────────────────────────────
+          success && validCount >= minImages ? (
             <Button
               variant="contained"
-              onClick={onProceedToPayment}
+              onClick={onClose}
               sx={{
                 background: "linear-gradient(to right, #1e4d8c, #00a99d)",
                 color: "white",
               }}
             >
-              Proceed to Payment
+              Done
             </Button>
           ) : (
             <Button

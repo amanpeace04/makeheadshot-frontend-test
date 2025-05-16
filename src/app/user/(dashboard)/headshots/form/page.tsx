@@ -1,6 +1,5 @@
-// File: src/components/ui/MultiStepForm.tsx
-
 "use client";
+
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -32,8 +31,20 @@ import {
   useFormContext,
 } from "@/context/MultiStepFormContext";
 import { useImageValidation } from "@/context/ImageValidationContext";
+import { useSearchParams } from "next/navigation";
 
-const steps = ["Personal Info", "Physical Details", "Professional & Package"];
+import BackgroundSelection from "@/components/ui/BackgroundSelection";
+import SelectedCombinations from "@/components/ui/SelectedCombinations";
+import FinalPreview from "@/components/ui/FinalPreview";
+
+const steps = [
+  "Personal Info",
+  "Physical Details",
+  "Select Backgrounds",
+  "Review Selections",
+  "Finalize & Submit",
+];
+
 interface PaymentValidateResponse {
   payment_found: boolean;
   payment_status: "pending" | "paid" | "failed";
@@ -68,19 +79,12 @@ function InnerForm() {
             sx={{ mb: 2 }}
           />
           <TextField
-            select
             fullWidth
             label="Age *"
             value={ctx.age}
             onChange={(e) => ctx.setAge(e.target.value)}
             sx={{ mb: 2 }}
-          >
-            {ageOptions.map((o) => (
-              <MenuItem key={o} value={o}>
-                {o}
-              </MenuItem>
-            ))}
-          </TextField>
+          ></TextField>
           <TextField
             select
             fullWidth
@@ -113,7 +117,6 @@ function InnerForm() {
               </MenuItem>
             ))}
           </TextField>
-
           <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
             <TextField
               fullWidth
@@ -130,7 +133,6 @@ function InnerForm() {
               onChange={(e) => ctx.setHeight(e.target.value)}
             />
           </Box>
-
           <Box sx={{ display: "flex", gap: 2 }}>
             <TextField
               select
@@ -163,65 +165,12 @@ function InnerForm() {
         </CardContent>
       )}
 
-      {ctx.activeStep === 2 && (
-        <CardContent>
-          <TextField
-            fullWidth
-            label="Profession *"
-            value={ctx.profession}
-            onChange={(e) => ctx.setProfession(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            select
-            fullWidth
-            label="Package *"
-            value={ctx.packageName}
-            onChange={(e) => ctx.setPackageName(e.target.value)}
-            sx={{ mb: 2 }}
-          >
-            {packageOptions.map((o) => (
-              <MenuItem key={o} value={o}>
-                {o}
-              </MenuItem>
-            ))}
-          </TextField>
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <TextField
-              fullWidth
-              type="number"
-              label="# Input Images *"
-              value={ctx.userInputImagesCount}
-              onChange={(e) => ctx.setUserInputImagesCount(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              type="number"
-              label="Total Output Images *"
-              value={ctx.totalNumberOutputImages}
-              onChange={(e) => ctx.setTotalNumberOutputImages(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              type="number"
-              label="# Images to Generate *"
-              value={ctx.numImages}
-              onChange={(e) => ctx.setNumImages(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-          </Box>
-        </CardContent>
-      )}
+      {ctx.activeStep === 2 && <BackgroundSelection />}
+      {ctx.activeStep === 3 && <SelectedCombinations />}
+      {ctx.activeStep === 4 && <FinalPreview />}
 
       <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          px: 3,
-          pb: 3,
-        }}
+        sx={{ display: "flex", justifyContent: "space-between", px: 3, pb: 3 }}
       >
         <Button disabled={ctx.activeStep === 0} onClick={ctx.prevStep}>
           Back
@@ -257,42 +206,42 @@ function InnerForm() {
 
 function FormContent() {
   const ctx = useFormContext();
+  const { setPackageName } = useFormContext();
+
   const { email } = ctx;
-  const { modelName } = useImageValidation();
+  const { modelName, setModelName } = useImageValidation();
+  const searchParams = useSearchParams();
+  const queryModelId = searchParams.get("modelID");
+  const effectiveModelId = queryModelId || modelName;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // don’t fire until both are set
-    if (!email || !modelName) return;
-
+    if (queryModelId) {
+      setModelName(queryModelId);
+    }
+    if (!email || !effectiveModelId) return;
     setLoading(true);
     apiHelper
       .get<PaymentValidateResponse>(
         `/api/payment/validate?email_id=${encodeURIComponent(
           email
-        )}&model_id=${encodeURIComponent(modelName)}`
+        )}&model_id=${encodeURIComponent(effectiveModelId)}`
       )
       .then((res) => {
         if (res.payment_found) {
-          // everything’s good; clear any error
+          setPackageName(res.package_name);
           setError(null);
-          // you can also stash the response into state here if you need it
-        } else {
-          setError("No payment record found. Please contact support.");
-        }
+        } else setError("No payment record found. Please contact support.");
       })
-      .catch((e: any) => {
-        setError(e.message || "Network error during validation.");
-      })
-      .finally(() => {
-        // always clear the loader once the call completes
-        setLoading(false);
-      });
+      .catch((e: any) =>
+        setError(e.message || "Network error during validation.")
+      )
+      .finally(() => setLoading(false));
   }, [email, modelName]);
 
-  if (loading) {
+  if (loading)
     return (
       <Box
         sx={{
@@ -307,9 +256,8 @@ function FormContent() {
         <CircularProgress size={64} />
       </Box>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <Box
         sx={{
@@ -332,25 +280,15 @@ function FormContent() {
         </Button>
       </Box>
     );
-  }
 
-  // all good → show form
   return (
     <Container
       maxWidth="md"
-      sx={{
-        py: 6,
-        background: "#f5f7fa",
-        minHeight: "100vh",
-      }}
+      sx={{ py: 6, background: "#f5f7fa", minHeight: "100vh" }}
     >
       <Paper
         elevation={4}
-        sx={{
-          mx: "auto",
-          borderRadius: 3,
-          overflow: "hidden",
-        }}
+        sx={{ mx: "auto", borderRadius: 3, overflow: "hidden" }}
       >
         {/* Header */}
         <Box
@@ -374,7 +312,7 @@ function FormContent() {
           ))}
         </Stepper>
 
-        {/* Animated Content */}
+        {/* Content */}
         <AnimatePresence exitBeforeEnter>
           <motion.div
             key={ctx.activeStep}

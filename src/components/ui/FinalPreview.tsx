@@ -1,18 +1,10 @@
-// File: src/components/ui/FinalPreview.tsx
 "use client";
 
 import React, { useState } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Avatar,
-} from "@mui/material";
+import { Box, Paper, Typography, Button, Avatar } from "@mui/material";
 import { useFormContext } from "@/context/MultiStepFormContext";
 import { useImageValidation } from "@/context/ImageValidationContext";
+import ImageValidationModal from "./ImageValidationModal";
 
 export default function FinalPreview() {
   const {
@@ -25,11 +17,16 @@ export default function FinalPreview() {
     eyeColor,
     spectacles,
     jobs,
+    prevStep,
   } = useFormContext();
   const { validatedFiles } = useImageValidation();
 
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [agreePhotos, setAgreePhotos] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // On validation, keep modal open so user can see results
+  const handleValidated = (success: boolean) => {
+    // validatedFiles in context are updated; do not auto-close modal
+  };
 
   return (
     <Box sx={{ p: 4 }}>
@@ -102,23 +99,23 @@ export default function FinalPreview() {
             <Box component="ul" sx={{ pl: 2, mb: 2 }}>
               {jobs.map((job, i) => (
                 <Typography component="li" key={`${job.combo_id}-${i}`}>
-                  <strong>{job.background.replace(/_/g, " ")}</strong> –{" "}
+                  <strong>{job.background.replace(/_/g, " ")}</strong> –
                   {job.clothing.replace(/_/g, " ")}
                 </Typography>
               ))}
             </Box>
-            <Button variant="outlined" size="small">
+            <Button variant="outlined" size="small" onClick={prevStep}>
               Edit styles
             </Button>
           </Box>
         </Box>
 
-        {/* Uploaded photos */}
+        {/* Uploaded photos or add photos */}
         <Box sx={{ mt: 4 }}>
           <Typography variant="h6" gutterBottom>
             Your Photos
           </Typography>
-          <Box sx={{ display: "flex", gap: 1 }}>
+          <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
             {validatedFiles.map((file, i) => (
               <Avatar
                 variant="rounded"
@@ -128,63 +125,33 @@ export default function FinalPreview() {
               />
             ))}
           </Box>
-          <Button variant="outlined" size="small" sx={{ mt: 2 }}>
-            Change photos
-          </Button>
+          {validatedFiles.length > 0 ? (
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => setModalOpen(true)}
+            >
+              Change photos
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => setModalOpen(true)}
+            >
+              Add photos
+            </Button>
+          )}
         </Box>
       </Paper>
 
-      {/* Checkboxes & Submit */}
-      <Box sx={{ mb: 2 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={agreeTerms}
-              onChange={() => setAgreeTerms((v) => !v)}
-            />
-          }
-          label={
-            <Typography variant="body2">
-              I agree to the{" "}
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                terms and conditions
-              </a>
-              ,{" "}
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                privacy policy
-              </a>{" "}
-              and the{" "}
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                upload requirements
-              </a>
-              .
-            </Typography>
-          }
-        />
-      </Box>
-      <Box sx={{ mb: 4 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={agreePhotos}
-              onChange={() => setAgreePhotos((v) => !v)}
-            />
-          }
-          label={
-            <Typography variant="body2">
-              I have uploaded my best photos and understand these will influence
-              the final result.
-            </Typography>
-          }
-        />
-      </Box>
-      <Button
-        variant="contained"
-        disabled={!(agreeTerms && agreePhotos)}
-        onClick={() => useFormContext().handleSubmit()}
-      >
-        Submit my photos
-      </Button>
+      {/* Image Validation Modal; hide "Proceed to Payment" and keep open on validate */}
+      <ImageValidationModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onValidated={handleValidated}
+        // no onProceedToPayment prop => modal will not show proceed button
+      />
     </Box>
   );
 }

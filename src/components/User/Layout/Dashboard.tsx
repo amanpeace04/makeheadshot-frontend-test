@@ -1,7 +1,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import PackagesSection from "@/components/ui/PurchaseSection";
-
+import PreviousJobs from "@/components/ui/PreviousJobs";
 interface DashboardProps {
   children: React.ReactNode;
 }
@@ -31,7 +31,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ children }) => {
                 Select a package to get started with your professional portraits
               </p>
             </div>
-
+<PreviousJobs />
             {/* Using the existing PackagesSection component - maintains all original logic */}
             <PackagesSection />
           </div>
