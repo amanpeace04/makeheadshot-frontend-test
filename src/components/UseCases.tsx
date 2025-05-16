@@ -147,7 +147,7 @@ const UseCases: React.FC = () => {
                       {item.description}
                     </p>
                     <a
-                      href="#"
+                      href={`learn-more?id=${item.id}`}
                       className="inline-flex items-center text-[#0A66C2] hover:text-[#0A66C2]/80 font-medium text-sm"
                     >
                       Learn more

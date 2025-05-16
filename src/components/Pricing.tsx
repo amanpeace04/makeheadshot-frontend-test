@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Pricing: React.FC = () => {
   return (
-    <section className="py-20 bg-white overflow-hidden">
+    <section id="pricing" className="py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold text-center mb-4 text-corporate-dark">
           Simple,{" "}

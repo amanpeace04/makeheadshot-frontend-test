@@ -154,7 +154,11 @@ const FAQ: React.FC = () => {
   ];
 
   return (
-    <section className="pt-20 pb-32 bg-white relative" ref={sectionRef}>
+    <section
+      id="faq"
+      className="pt-20 pb-32 bg-white relative"
+      ref={sectionRef}
+    >
       <div className="container mx-auto px-4" onClick={handleContainerClick}>
         <h2 className="text-4xl font-bold text-center mb-4 text-corporate-dark">
           Frequently Asked{" "}
