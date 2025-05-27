@@ -32,11 +32,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const currentPath = window.location.pathname;
+    const protectedRoutePrefixes = ["/user", "/profile"];
+
+    const isProtectedRoute = protectedRoutePrefixes.some((prefix) =>
+      currentPath.startsWith(prefix)
+    );
 
     if (!token) {
       // no token → stop loading, then redirect
       setLoading(false);
-      router.replace("/login");
+      if (isProtectedRoute) {
+        router.replace("/login");
+      }
       return;
     }
 

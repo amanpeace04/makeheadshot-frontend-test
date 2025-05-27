@@ -62,7 +62,7 @@ export default function BackgroundSelection({
   };
 
   return (
-    <Box sx={{ p: 4, display: "flex", gap: 4 }}>
+    <Box sx={{ p: 4, display: "flex", gap: 4, flexWrap: "wrap" }}>
       {/* LEFT: Available Backdrops (3/5 width) */}
       <Box sx={{ flex: 3 }}>
         <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 1 }}>
@@ -80,55 +80,51 @@ export default function BackgroundSelection({
             component="div"
             sx={{
               display: "grid",
-              gap: 3,
+              gap: 2,
               gridTemplateColumns: {
                 xs: "1fr",
                 sm: "repeat(2, 1fr)",
-                md: "repeat(3, 1fr)",
               },
             }}
           >
             {visibleBgs.map((bg) => (
-              <Grid item key={bg.id}>
-                <Card
-                  elevation={2}
-                  sx={{
-                    borderRadius: 2,
-                    overflow: "hidden",
-                    cursor:
-                      jobs.length < selectionLimit ? "pointer" : "not-allowed",
-                    opacity: jobs.length < selectionLimit ? 1 : 0.6,
-                    transition: "transform 0.3s, box-shadow 0.3s",
-                    "&:hover": {
-                      transform:
-                        jobs.length < selectionLimit
-                          ? "scale(1.03)"
-                          : undefined,
-                      boxShadow:
-                        jobs.length < selectionLimit
-                          ? theme.shadows[6]
-                          : undefined,
-                    },
-                  }}
-                  onClick={() => openClothesFor(bg.id)}
-                >
-                  <CardMedia
-                    component="img"
-                    height={140}
-                    image={bg.src}
-                    alt={bg.label}
-                    sx={{ objectFit: "cover" }}
-                  />
-                  <CardContent>
-                    <Typography noWrap sx={{ fontWeight: 500 }}>
-                      {bg.label}
-                    </Typography>
-                    <Button size="small" sx={{ mt: 1 }}>
-                      Select +
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
+              <Card
+                key={bg.id}
+                elevation={2}
+                sx={{
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  cursor:
+                    jobs.length < selectionLimit ? "pointer" : "not-allowed",
+                  opacity: jobs.length < selectionLimit ? 1 : 0.6,
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                  "&:hover": {
+                    transform:
+                      jobs.length < selectionLimit ? "scale(1.02)" : undefined,
+                    boxShadow:
+                      jobs.length < selectionLimit
+                        ? theme.shadows[4]
+                        : undefined,
+                  },
+                }}
+                onClick={() => openClothesFor(bg.id)}
+              >
+                <CardMedia
+                  component="img"
+                  height={120}
+                  image={bg.src}
+                  alt={bg.label}
+                  sx={{ objectFit: "cover" }}
+                />
+                <CardContent>
+                  <Typography noWrap sx={{ fontWeight: 500 }}>
+                    {bg.label}
+                  </Typography>
+                  <Button size="small" sx={{ mt: 1 }}>
+                    Select +
+                  </Button>
+                </CardContent>
+              </Card>
             ))}
           </Box>
         </Paper>
@@ -239,37 +235,45 @@ export default function BackgroundSelection({
             background with an outfit you want to wear with.
           </Typography>
 
-          <Grid container spacing={2}>
+          <Box
+            sx={{
+              display: "grid",
+              gap: 2,
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+              },
+            }}
+          >
             {clothingOptions.map((c) => (
-              <Grid item xs={12} sm={6} key={`${openBg}-${c.id}`}>
-                <Card
-                  elevation={2}
-                  sx={{
-                    borderRadius: 2,
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    "&:hover": { boxShadow: 6, transform: "scale(1.03)" },
-                    transition: "all 0.3s",
-                  }}
-                  onClick={() => pickClothing(c.id)}
-                >
-                  <CardMedia
-                    component="img"
-                    height={120}
-                    image={c.src}
-                    alt={c.label}
-                    sx={{ objectFit: "cover" }}
-                  />
-                  <CardContent sx={{ textAlign: "center" }}>
-                    <Typography noWrap>{c.label}</Typography>
-                    <Button size="small" sx={{ mt: 1 }}>
-                      Select +
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
+              <Card
+                key={`${openBg}-${c.id}`}
+                elevation={2}
+                sx={{
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  "&:hover": { boxShadow: 6, transform: "scale(1.02)" },
+                  transition: "all 0.3s",
+                }}
+                onClick={() => pickClothing(c.id)}
+              >
+                <CardMedia
+                  component="img"
+                  height={120}
+                  image={c.src}
+                  alt={c.label}
+                  sx={{ objectFit: "cover" }}
+                />
+                <CardContent sx={{ textAlign: "center" }}>
+                  <Typography noWrap>{c.label}</Typography>
+                  <Button size="small" sx={{ mt: 1 }}>
+                    Select +
+                  </Button>
+                </CardContent>
+              </Card>
             ))}
-          </Grid>
+          </Box>
         </Box>
       </Dialog>
     </Box>

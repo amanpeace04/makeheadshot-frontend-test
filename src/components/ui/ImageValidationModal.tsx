@@ -24,6 +24,7 @@ import { motion } from "framer-motion";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { loadFaceModels, validateFaces } from "@/utils/faceValidation";
 import { useImageValidation } from "@/context/ImageValidationContext";
 
@@ -54,6 +55,7 @@ export default function ImageValidationModal({
   minImages = 8,
   maxImages = 15,
   minFacePercent = 8,
+  maxFacePercent = 30,
 }: Props) {
   const theme = useTheme();
   const { setValidatedFiles } = useImageValidation();
@@ -106,6 +108,20 @@ export default function ImageValidationModal({
     multiple: true,
   });
 
+  const handleCameraUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.multiple = true;
+    input.capture = "environment";
+    input.onchange = (e: any) => {
+      if (e.target.files?.length) {
+        onDrop(Array.from(e.target.files));
+      }
+    };
+    input.click();
+  };
+
   // Run face validation and update statuses
   const handleVerify = async () => {
     if (validationInProgress.current) return;
@@ -131,21 +147,30 @@ export default function ImageValidationModal({
 
     try {
       const files = validItems.map((i) => i.file);
-      const res = await validateFaces(files, minFacePercent);
+      const res = await validateFaces(files, minFacePercent, maxFacePercent);
 
-      // Map valid filenames
       const validSet = new Set(res.valid);
-      // Update items
       setItems((prev) =>
         prev.map((item) => {
           if (item.status === "duplicate") return item;
+
+          const fileDetail = res.details.find(
+            (d) => d.filename === item.file.name
+          );
+
           if (validSet.has(item.file.name)) {
             return { ...item, status: "valid" };
           }
+
+          let errorMessage = `Face < ${minFacePercent}%`;
+          if (fileDetail?.face_percent > maxFacePercent) {
+            errorMessage = `Face > ${maxFacePercent}%`;
+          }
+
           return {
             ...item,
             status: "invalid",
-            errorMessage: `Face < ${minFacePercent}%`,
+            errorMessage,
           };
         })
       );
@@ -206,8 +231,8 @@ export default function ImageValidationModal({
             Select Images for Your AI Headshots
           </Typography>
           <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
-            Please select {minImages}–{maxImages} images (each ≥{" "}
-            {minFacePercent}% face area)
+            Please select {minImages}–{maxImages} images(each between{" "}
+            {minFacePercent}% and {maxFacePercent}% face area)
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
@@ -235,6 +260,16 @@ export default function ImageValidationModal({
                 ? "Drop here…"
                 : `Click or drag to select (${nonDupCount} of ${minImages})`}
             </Typography>
+          </Box>
+
+          <Box textAlign="center" mb={3}>
+            <Button
+              variant="outlined"
+              onClick={handleCameraUpload}
+              startIcon={<CameraAltIcon />}
+            >
+              Use Camera
+            </Button>
           </Box>
 
           <Grid container spacing={2}>

@@ -1,5 +1,6 @@
 // components/DashboardLayout.tsx
 "use client";
+
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
@@ -26,12 +27,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     {
       label: "Dashboard",
       href: "/user",
-      icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 " />,
+      icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700" />,
     },
     {
       label: "Packages",
       href: "/user/headshots",
-      icon: <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 " />,
+      icon: <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700" />,
     },
   ];
 
@@ -42,15 +43,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <Navbar />
       <div
         className={cn(
-          "mx-auto flex w-full flex-1 flex-col overflow-hidden rounded-md border  bg-[#a2c8ee] md:flex-row ",
-          "min-h-screen"
+          "mx-auto flex w-full flex-1 flex-col md:flex-row min-h-screen overflow-hidden bg-[#a2c8ee] border rounded-md"
         )}
       >
         <Sidebar open={open} setOpen={setOpen}>
-          <SidebarBody className="justify-between gap-10 bg-[#a2c8ee]">
-            <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-              {/* <Logo /> */}
-              <div className="mt-8 flex flex-col gap-2">
+          <SidebarBody className="justify-between gap-10 bg-[#a2c8ee] p-4">
+            <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden custom-scrollbar">
+              <div className="mt-6 flex flex-col gap-2">
                 {links.map((link, idx) => (
                   <SidebarLink key={idx} link={link} />
                 ))}
@@ -59,8 +58,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </SidebarBody>
         </Sidebar>
 
-        {/* dashboard "frame" around whatever's passed in */}
-        <Dashboard>{children}</Dashboard>
+        <div className="flex-1 p-4 md:p-6 overflow-y-auto custom-scrollbar">
+          <Dashboard>{children}</Dashboard>
+        </div>
       </div>
     </>
   );

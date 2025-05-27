@@ -51,9 +51,11 @@ const Hero: React.FC = () => {
         <h1 className="mb-10 text-5xl font-extrabold text-gray-900 sm:text-6xl font-poppins">
           <span className="block mb-5">Make Professional</span>
 
-          <span className="relative inline-block mb-5">
-            <span className="relative z-10 text-white">Headshots</span>
-            <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-emerald-500"></span>
+          <span className="relative inline-block mb-5 px-4 py-2 rounded-lg cursor-default select-none">
+            <span className="relative z-20 text-white drop-shadow-md">
+              Headshots
+            </span>
+            <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-emerald-500 transition-transform duration-300 ease-in-out hover:scale-105"></span>
           </span>
 
           <span className="block">in minutes</span>

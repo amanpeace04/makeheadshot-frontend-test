@@ -86,6 +86,7 @@ export default function PreviousJobs() {
   }
 
   return (
+    <Box sx={{ pb: 6 }}>
     <Grid container spacing={4}>
       {jobs.map((job) => {
         const purchasedOn = new Date(job.created_at * 1000).toLocaleString();
@@ -169,6 +170,7 @@ export default function PreviousJobs() {
           </Grid>
         );
       })}
-    </Grid>
+      </Grid>
+      </Box>
   );
 }

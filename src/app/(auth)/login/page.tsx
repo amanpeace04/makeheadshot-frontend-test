@@ -1,4 +1,3 @@
-// pages/login.tsx
 "use client";
 
 import { useState } from "react";
@@ -15,6 +14,10 @@ import {
   useMediaQuery,
   IconButton,
   InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -32,6 +35,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Forgot password dialog states
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,8 +61,28 @@ export default function LoginPage() {
     }
   };
 
+
   const handleGoogle = () => {
-    toast.info("Google OAuth flow not implemented yet");
+    window.location.href = `${process.env.NEXT_PUBLIC_APP_API_URL}/auth/google`;
+  };
+  
+  // Forgot Password Handlers
+  const openForgotDialog = () => setForgotOpen(true);
+  const closeForgotDialog = () => setForgotOpen(false);
+
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotLoading(true);
+    try {
+      await apiHelper.post("/auth/forgot-password", { email: forgotEmail });
+      toast.success("Password reset link sent! Check your email.");
+      setForgotEmail("");
+      closeForgotDialog();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send reset email");
+    } finally {
+      setForgotLoading(false);
+    }
   };
 
   return (
@@ -159,6 +187,18 @@ export default function LoginPage() {
               }}
             />
 
+            {/* Forgot Password link */}
+            <Box textAlign="right" mt={1} mb={2}>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={openForgotDialog}
+                sx={{ cursor: "pointer" }}
+              >
+                Forgot Password?
+              </Link>
+            </Box>
+
             <Button
               variant="contained"
               type="submit"
@@ -198,6 +238,34 @@ export default function LoginPage() {
           </Box>
         </Grid>
       </Grid>
+
+      {/* Forgot Password Dialog */}
+      <Dialog open={forgotOpen} onClose={closeForgotDialog}>
+        <DialogTitle>Reset Password</DialogTitle>
+        <Box component="form" onSubmit={handleForgotSubmit}>
+          <DialogContent>
+            <Typography variant="body2" mb={1}>
+              Enter your registered email to receive a password reset link.
+            </Typography>
+            <TextField
+              label="Email"
+              type="email"
+              required
+              fullWidth
+              value={forgotEmail}
+              onChange={(e) => setForgotEmail(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button onClick={closeForgotDialog} disabled={forgotLoading}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" disabled={forgotLoading}>
+              {forgotLoading ? "Sending…" : "Send Link"}
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
     </Box>
   );
 }

@@ -7,8 +7,11 @@ export async function loadFaceModels(modelPath = "/models") {
   await faceapi.nets.tinyFaceDetector.loadFromUri(modelPath);
 }
 
-// 2. Validate images purely on face coverage percentage (minFacePercent)
-export async function validateFaces(files, minFacePercent = 8) {
+// 2. Validate images purely on face coverage percentage (minFacePercent and maxFacePercent)
+//    - minFacePercent: Minimum percentage of the image that must be covered by faces
+//    - maxFacePercent: Maximum percentage of the image that can be covered by faces
+//    - If the face coverage is within the range, the image is valid
+export async function validateFaces(files, minFacePercent = 8, maxFacePercent = 30) {
   const details = [];
   let validCount = 0;
 
@@ -31,7 +34,7 @@ export async function validateFaces(files, minFacePercent = 8) {
     const facePercent = (faceArea / totalArea) * 100;
 
     // Valid if coverage ≥ threshold
-    const isValid = facePercent >= minFacePercent;
+    const isValid = facePercent >= minFacePercent && facePercent <= maxFacePercent;
     if (isValid) validCount++;
 
     details.push({

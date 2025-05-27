@@ -31,33 +31,40 @@ export const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="flex items-center justify-between px-4 py-2  dark:bg-[#a2c8ee] dark:border-[#a2c8ee]">
+    <nav className="flex items-center justify-between px-6 py-3 dark:bg-[#a2c8ee] dark:border-[#a2c8ee] border-b border-gray-200">
       {/* Left: Logo */}
-      <div className="flex items-center">{/* <LogoIcon /> */}</div>
+      <div className="flex items-center">
+        {/* <LogoIcon /> */}
+        <span className="text-lg font-semibold tracking-wide">MyApp</span>
+      </div>
 
       {/* Right: User menu */}
       <div className="relative" ref={menuRef}>
         <button
           onClick={() => setOpen((o) => !o)}
-          className="flex items-center space-x-1 text-gray-800 dark:text-gray-800"
+          className="flex items-center hover:cursor-pointer gap-1 px-3 py-2 rounded-md text-gray-800 dark:text-gray-800 hover:bg-gray-100 dark:hover:bg-gray-200 transition"
         >
-          <span className="font-medium">{user?.name || "User"}</span>
-          <IconChevronDown className="w-4 h-4" />
+          <span className="font-medium text-sm">{user?.name || "User"}</span>
+          <IconChevronDown
+            className={`w-4 h-4 transition-transform ${
+              open ? "rotate-180" : ""
+            }`}
+          />
         </button>
 
         {open && (
-          <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-20 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-xl z-20 overflow-hidden animate-fade-in">
             <button
               onClick={() => router.push("/profile")}
-              className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition hover:cursor-pointer"
             >
-              <IconUser className="w-4 h-4 mr-2" /> Profile
+              <IconUser className="w-4 h-4" /> Profile
             </button>
             <button
               onClick={handleLogout}
-              className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition hover:cursor-pointer"
             >
-              <IconLogout className="w-4 h-4 mr-2" /> Logout
+              <IconLogout className="w-4 h-4" /> Logout
             </button>
           </div>
         )}

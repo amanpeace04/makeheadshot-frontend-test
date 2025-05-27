@@ -76,45 +76,54 @@ const HowItWorks: React.FC = () => {
         </div>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 px-4 md:px-0">
           {steps.map((step, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-lg p-8 shadow-md flex flex-col h-full"
+              className="bg-white rounded-xl p-8 shadow-lg flex flex-col h-full"
             >
               {/* Icon and number */}
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-6 mb-6">
                 <Image
                   src={step.icon}
                   alt={`Step ${step.number} icon`}
-                  className="w-16 h-16"
+                  className="w-20 h-20 object-contain flex-shrink-0"
+                  priority
                 />
-                <div className="flex items-center gap-2">
-                  <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent text-2xl font-bold">
+                <div className="flex flex-col">
+                  <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent text-4xl font-extrabold leading-none mb-1">
                     {step.number}
                   </span>
-                  <h3 className="text-xl font-bold">{step.title}</h3>
+                  <h3 className="text-2xl font-bold leading-snug max-w-xs">
+                    {step.title}
+                  </h3>
                 </div>
               </div>
 
               {/* Description */}
-              <p className="text-gray-600 mb-6">{step.description}</p>
+              <p className="text-gray-700 mb-8 flex-grow leading-relaxed">
+                {step.description}
+              </p>
 
               {/* Images with indicators */}
               <div className="mt-auto">
                 {idx === 0 && (
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {step.images.map((img, i) => (
-                      <div key={i} className="relative aspect-square">
+                      <div
+                        key={i}
+                        className="relative aspect-square rounded-lg overflow-hidden shadow-sm"
+                      >
                         <Image
                           src={img}
                           alt={`${step.title} example ${i + 1}`}
                           className="w-full h-full object-cover rounded-lg"
+                          priority={i < 3}
                         />
-                        <div className="absolute bottom-2 right-2 bg-gradient-to-r from-blue-600 to-emerald-500 rounded-full w-6 h-6 flex items-center justify-center">
+                        <div className="absolute bottom-3 right-3 bg-gradient-to-r from-blue-600 to-emerald-500 rounded-full w-7 h-7 flex items-center justify-center shadow-md">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 text-white"
+                            className="h-5 w-5 text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -133,26 +142,27 @@ const HowItWorks: React.FC = () => {
                 )}
 
                 {idx === 1 && (
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {step.images.map((img, i) => (
                       <div
                         key={i}
-                        className={`relative aspect-square ${
+                        className={`relative aspect-square rounded-lg overflow-hidden shadow-sm ${
                           i < 3 ? "ring-2 ring-blue-600" : ""
                         }`}
                       >
                         <Image
                           src={img}
                           alt={`Style option ${i + 1}`}
-                          className={`w-full h-full object-cover rounded-lg ${
+                          className={`w-full h-full object-cover rounded-lg transition-opacity duration-300 ${
                             i >= 3 ? "opacity-80" : ""
                           }`}
+                          priority={i < 3}
                         />
                         {i < 3 && (
-                          <div className="absolute top-2 right-2 bg-gradient-to-r from-blue-600 to-emerald-500 rounded-full w-6 h-6 flex items-center justify-center">
+                          <div className="absolute top-3 right-3 bg-gradient-to-r from-blue-600 to-emerald-500 rounded-full w-7 h-7 flex items-center justify-center shadow-md">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 text-white"
+                              className="h-5 w-5 text-white"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -172,13 +182,17 @@ const HowItWorks: React.FC = () => {
                 )}
 
                 {idx === 2 && (
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-4 gap-3">
                     {step.images.map((img, i) => (
-                      <div key={i} className="relative aspect-square">
+                      <div
+                        key={i}
+                        className="relative aspect-square rounded-lg overflow-hidden shadow-sm"
+                      >
                         <Image
                           src={img}
                           alt={`Final headshot ${i + 1}`}
                           className="w-full h-full object-cover rounded-lg"
+                          priority={i < 4}
                         />
                       </div>
                     ))}

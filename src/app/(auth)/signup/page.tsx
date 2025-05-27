@@ -73,9 +73,9 @@ export default function SignupPage() {
   };
 
   const handleGoogle = () => {
-    toast.info("Google OAuth flow not implemented yet");
+    window.location.href = `${process.env.NEXT_PUBLIC_APP_API_URL}/auth/google`;
   };
-
+  
   return (
     <Box
       sx={{
