@@ -1,4 +1,3 @@
-// File: src/components/ui/PackageList.tsx
 "use client";
 
 import React from "react";
@@ -12,17 +11,12 @@ interface PackageListProps {
 }
 
 export default function PackageList({ packages, onSelect }: PackageListProps) {
-  // Sort packages to ensure Basic, Professional, Executive order
+  // Correct sorting by package_name based on your actual package names
+  const order = { Basic: 1, Pro: 2, Executive: 3 };
+
   const sortedPackages = [...packages].sort((a, b) => {
-    const order = { "Basic": 1, "Professional": 2, "Executive": 3 };
-    const aOrder = a.package_name.includes("Basic") ? order.Basic : 
-                  a.package_name.includes("Professional") ? order.Professional :
-                  a.package_name.includes("Executive") ? order.Executive : 99;
-    
-    const bOrder = b.package_name.includes("Basic") ? order.Basic : 
-                  b.package_name.includes("Professional") ? order.Professional :
-                  b.package_name.includes("Executive") ? order.Executive : 99;
-                  
+    const aOrder = order[a.package_name] ?? 99;
+    const bOrder = order[b.package_name] ?? 99;
     return aOrder - bOrder;
   });
 
@@ -35,21 +29,19 @@ export default function PackageList({ packages, onSelect }: PackageListProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
         >
-          <div className={cn(
-            "rounded-2xl h-full",
-            pkg.package_name.toLowerCase().includes("professional") 
-              ? "border-2 border-corporate-blue bg-white shadow-lg relative" 
-              : "border-2 border-gray-200 bg-white shadow-sm"
-          )}>
-            {pkg.package_name.toLowerCase().includes("professional") && (
+          <div
+            className={cn(
+              "rounded-2xl h-full",
+              pkg.package_name.toLowerCase().includes("pro")
+                ? "border-2 border-corporate-blue bg-white shadow-lg relative"
+                : "border-2 border-gray-200 bg-white shadow-sm"
+            )}
+          >
+            {pkg.package_name.toLowerCase().includes("pro") && (
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-corporate-blue/10 to-corporate-green/10 -z-10"></div>
             )}
 
-            <PackageCard 
-              pkg={pkg} 
-              index={index} 
-              onBuy={onSelect} 
-            />
+            <PackageCard pkg={pkg} index={index} onBuy={onSelect} />
           </div>
         </motion.div>
       ))}

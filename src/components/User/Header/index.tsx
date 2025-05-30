@@ -31,11 +31,13 @@ export const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="flex items-center justify-between px-6 py-3 dark:bg-[#a2c8ee] dark:border-[#a2c8ee] border-b border-gray-200">
+    <nav className="flex items-center justify-between px-6 py-3 dark:bg-blue-600 dark:border-[#a2c8ee] border-b border-gray-200">
       {/* Left: Logo */}
       <div className="flex items-center">
         {/* <LogoIcon /> */}
-        <span className="text-lg font-semibold tracking-wide">MyApp</span>
+        <span className="text-lg font-semibold tracking-wide">
+          Make Headshot
+        </span>
       </div>
 
       {/* Right: User menu */}

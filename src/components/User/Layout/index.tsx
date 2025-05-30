@@ -43,11 +43,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <Navbar />
       <div
         className={cn(
-          "mx-auto flex w-full flex-1 flex-col md:flex-row min-h-screen overflow-hidden bg-[#a2c8ee] border rounded-md"
+          "mx-auto flex w-full flex-1 flex-col md:flex-row min-h-screen overflow-hidden bg-blue-600 border rounded-md"
         )}
       >
         <Sidebar open={open} setOpen={setOpen}>
-          <SidebarBody className="justify-between gap-10 bg-[#a2c8ee] p-4">
+          <SidebarBody className="justify-between gap-10 bg-blue-600 p-4">
             <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden custom-scrollbar">
               <div className="mt-6 flex flex-col gap-2">
                 {links.map((link, idx) => (

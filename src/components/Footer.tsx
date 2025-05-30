@@ -60,23 +60,23 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-bold text-gray-900 mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#blog" className="text-gray-600 hover:text-gray-900">
+                <a href="/blog" className="text-gray-600 hover:text-gray-900">
                   Blog
                 </a>
               </li>
               <li>
-                <a href="#help" className="text-gray-600 hover:text-gray-900">
+                <a href="/help-center" className="text-gray-600 hover:text-gray-900">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#terms" className="text-gray-600 hover:text-gray-900">
+                <a href="/terms-of-service" className="text-gray-600 hover:text-gray-900">
                   Terms of Service
                 </a>
               </li>
               <li>
                 <a
-                  href="#privacy"
+                  href="/privacy-policy"
                   className="text-gray-600 hover:text-gray-900"
                 >
                   Privacy Policy

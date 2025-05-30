@@ -191,7 +191,7 @@ export default function PurchaseSection() {
   return (
     <Container maxWidth="lg" sx={{ py: 0 }}>
       <Typography variant="h3" align="center" gutterBottom>
-        Get Your Portrait
+        Make Headshot
       </Typography>
 
       <Stepper activeStep={activeStep} alternativeLabel sx={{ my: 4 }}>

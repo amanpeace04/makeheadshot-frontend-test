@@ -1,181 +1,129 @@
-// File: src/app/terms-of-service/page.tsx
 "use client";
+import React, { useEffect, useState } from "react";
+const TermsOfService = () => {
+  const [showContent, setShowContent] = useState(false);
 
-import React from "react";
-import {
-  Container,
-  Box,
-  Paper,
-  Typography,
-  Link,
-  Divider,
-} from "@mui/material";
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowContent(true), 100);
+    return () => clearTimeout(timeout);
+  }, []);
 
-export default function TermsOfServicePage() {
   return (
-    <Container
-      maxWidth="md"
-      sx={{ py: 6, background: "#f5f7fa", minHeight: "100vh" }}
-    >
-      <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
-        <Typography variant="h3" sx={{ mb: 2, fontWeight: 600 }}>
-          Terms of Service
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Last updated: May 16, 2025
-        </Typography>
+    <>
+      <div className="relative min-h-screen bg-gradient-to-br from-[#f0f4ff] via-[#eaf0ff] to-white">
+        <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] bg-cover opacity-10 pointer-events-none"></div>
 
-        <Divider sx={{ my: 3 }} />
+        <main
+          className={`max-w-5xl mx-auto px-6 py-16 transition-opacity duration-1000 ${
+            showContent ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-10 md:p-14 border border-gray-200">
+            <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-6">
+              Terms of Service
+            </h1>
+            <p className="text-sm text-center text-gray-600 mb-10">
+              Last updated: May 27, 2025
+            </p>
 
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            1. Acceptance of Terms
-          </Typography>
-          <Typography variant="body2" paragraph>
-            By accessing or using our AI Headshots service (the “Service”), you
-            agree to be bound by these Terms of Service (the “Terms”). If you do
-            not agree to these Terms, you may not use the Service.
-          </Typography>
-        </Box>
+            {sections.map(({ title, content }, index) => (
+              <section key={index} className="mb-10">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-3">
+                  {title}
+                </h2>
+                {Array.isArray(content) ? (
+                  <ul className="list-disc list-inside space-y-2 text-gray-700">
+                    {content.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-700">{content}</p>
+                )}
+              </section>
+            ))}
 
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            2. Eligibility
-          </Typography>
-          <Typography variant="body2" paragraph>
-            You must be at least 18 years old to use the Service. By agreeing to
-            these Terms, you represent and warrant that you are 18 or older.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            3. License to Use
-          </Typography>
-          <Typography variant="body2" paragraph>
-            Subject to your compliance with these Terms, we grant you a limited,
-            non-exclusive, non-transferable, revocable license to access and use
-            the Service for your personal, non-commercial use.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            4. User Conduct
-          </Typography>
-          <Typography variant="body2" paragraph>
-            You agree not to:
-          </Typography>
-          <Typography variant="body2" component="ul" sx={{ pl: 2, mb: 2 }}>
-            <Typography component="li">
-              Upload any content that is unlawful, harmful, or infringement of
-              third-party rights.
-            </Typography>
-            <Typography component="li">
-              Attempt to reverse engineer or tamper with our face-validation
-              technology.
-            </Typography>
-            <Typography component="li">
-              Use the Service to create or distribute offensive or abusive
-              imagery.
-            </Typography>
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            5. Intellectual Property
-          </Typography>
-          <Typography variant="body2" paragraph>
-            All content, designs, and materials provided by the Service,
-            including the AI-generated headshots, are owned by us or our
-            licensors and are protected by copyright, trademark, and other
-            intellectual property laws.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            6. Payment and Refunds
-          </Typography>
-          <Typography variant="body2" paragraph>
-            You agree to pay all applicable fees for paid plans or add-ons as
-            described at the time of purchase. All payments are non-refundable
-            except as required by law.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            7. Disclaimer of Warranties
-          </Typography>
-          <Typography variant="body2" paragraph>
-            The Service is provided “as is” and “as available” without warranty
-            of any kind. We disclaim all warranties, express or implied,
-            including merchantability, fitness for a particular purpose, and
-            non-infringement.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            8. Limitation of Liability
-          </Typography>
-          <Typography variant="body2" paragraph>
-            To the fullest extent permitted by law, in no event will we be
-            liable for any indirect, incidental, special, consequential, or
-            punitive damages arising out of or relating to your use of the
-            Service.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            9. Termination
-          </Typography>
-          <Typography variant="body2" paragraph>
-            We may suspend or terminate your access to the Service at any time,
-            with or without cause or notice, if you breach these Terms.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            10. Governing Law
-          </Typography>
-          <Typography variant="body2" paragraph>
-            These Terms are governed by and construed in accordance with the
-            laws of [Your Jurisdiction], without regard to conflict of law
-            provisions.
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            11. Changes to These Terms
-          </Typography>
-          <Typography variant="body2" paragraph>
-            We may modify these Terms from time to time. The “Last updated” date
-            at the top will reflect any changes. Continued use of the Service
-            constitutes acceptance of the new Terms.
-          </Typography>
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        <Box>
-          <Typography variant="h5" sx={{ mb: 1, fontWeight: 500 }}>
-            Contact Us
-          </Typography>
-          <Typography variant="body2">
-            If you have questions about these Terms, please contact us at{" "}
-            <Link href="mailto:support@yourdomain.com" underline="hover">
-              support@yourdomain.com
-            </Link>
-            .
-          </Typography>
-        </Box>
-      </Paper>
-    </Container>
+            <section className="mb-4">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-3">
+                Contact
+              </h2>
+              <p className="text-gray-700">
+                If you have any questions, please contact us at{" "}
+                <a
+                  href="mailto:support@makeheadshot.com"
+                  className="text-blue-600 underline"
+                >
+                  support@makeheadshot.com
+                </a>
+                .
+              </p>
+            </section>
+          </div>
+        </main>
+      </div>
+    </>
   );
-}
+};
+
+const sections = [
+  {
+    title: "1. Acceptance of Terms",
+    content:
+      "By accessing or using Make Headshot, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree, you may not use our services.",
+  },
+  {
+    title: "2. Eligibility",
+    content:
+      "You must be at least 13 years old to use our services. By using Make Headshot, you confirm that you meet this requirement.",
+  },
+  {
+    title: "3. User Responsibilities",
+    content: [
+      "Do not upload unlawful or harmful content.",
+      "Do not attempt unauthorized access to our systems.",
+      "Do not interfere with platform functionality.",
+    ],
+  },
+  {
+    title: "4. Account Security",
+    content:
+      "You are responsible for safeguarding your account. We are not liable for any unauthorized use of your credentials.",
+  },
+  {
+    title: "5. Intellectual Property",
+    content:
+      "All content, trademarks, and code are owned by Make Headshot or its licensors. Unauthorized reproduction is prohibited.",
+  },
+  {
+    title: "6. User Content",
+    content:
+      "By uploading content, you grant us a license to use it for providing and improving our services. You retain ownership.",
+  },
+  {
+    title: "7. Payment and Billing",
+    content:
+      "Some features require payment. You authorize us to charge fees as applicable. All sales are final unless stated.",
+  },
+  {
+    title: "8. Termination",
+    content:
+      "We may suspend or terminate your account for violation of terms. You may also deactivate your account anytime.",
+  },
+  {
+    title: "9. Limitation of Liability",
+    content:
+      "We are not liable for indirect or consequential damages arising from your use of the service.",
+  },
+  {
+    title: "10. Modifications",
+    content:
+      "We may update these Terms at any time. Your continued use indicates acceptance of the changes.",
+  },
+  {
+    title: "11. Governing Law",
+    content:
+      "These terms are governed by Indian law. Disputes are subject to the jurisdiction of courts in New Delhi.",
+  },
+];
+
+export default TermsOfService;
