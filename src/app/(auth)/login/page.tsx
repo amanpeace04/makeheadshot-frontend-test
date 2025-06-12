@@ -35,8 +35,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // Forgot password dialog states
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotOpen, setForgotOpen] = useState(false);
   const [forgotLoading, setForgotLoading] = useState(false);
@@ -47,8 +45,6 @@ export default function LoginPage() {
     try {
       const res = await apiHelper.post("/auth/login", { email, password });
       const token = res.access_token;
-
-      // store token
       localStorage.setItem("token", token);
       document.cookie = `token=${token}; max-age=${60 * 60 * 24}; path=/`;
 
@@ -61,12 +57,10 @@ export default function LoginPage() {
     }
   };
 
-
   const handleGoogle = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_APP_API_URL}/auth/google`;
   };
-  
-  // Forgot Password Handlers
+
   const openForgotDialog = () => setForgotOpen(true);
   const closeForgotDialog = () => setForgotOpen(false);
 
@@ -109,134 +103,142 @@ export default function LoginPage() {
           width: "100%",
         }}
       >
-        {isMdUp && (
-          <Grid
-            item
-            md={6}
-            component={motion.div}
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 60, damping: 15 }}
-            sx={{
-              backgroundImage: `url('/login-illustration.svg')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              minHeight: 600,
-            }}
-          />
-        )}
-
-        <Grid
-          item
-          xs={12}
-          md={6}
-          component={motion.div}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 90 }}
-          sx={{
-            bgcolor: "white",
-            p: 4,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
+        {/* Login Form on the left */}
+        <motion.div
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 60, damping: 15 }}
+          style={{ width: isMdUp ? "50%" : "100%" }}
         >
-          <Typography variant="h4" align="center" gutterBottom>
-            Welcome Back
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            mb={4}
+          <Box
+            sx={{
+              bgcolor: "white",
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              height: isMdUp ? 600 : "auto",
+            }}
           >
-            Sign in to your account
-          </Typography>
+            <Typography variant="h4" align="center" gutterBottom>
+              Welcome Back
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              align="center"
+              mb={4}
+            >
+              Sign in to your account
+            </Typography>
 
-          <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
-            <TextField
-              label="Email"
-              type="email"
-              required
-              fullWidth
-              margin="normal"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ width: "100%" }}
+            >
+              <TextField
+                label="Email"
+                type="email"
+                required
+                fullWidth
+                margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-            <TextField
-              label="Password"
-              required
-              fullWidth
-              margin="normal"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword((v) => !v)}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+              <TextField
+                label="Password"
+                required
+                fullWidth
+                margin="normal"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword((v) => !v)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-            {/* Forgot Password link */}
-            <Box textAlign="right" mt={1} mb={2}>
-              <Link
-                component="button"
-                variant="body2"
-                onClick={openForgotDialog}
-                sx={{ cursor: "pointer" }}
+              <Box textAlign="right" mt={1} mb={2}>
+                <Link
+                  component="button"
+                  variant="body2"
+                  onClick={openForgotDialog}
+                  sx={{ cursor: "pointer" }}
+                >
+                  Forgot Password?
+                </Link>
+              </Box>
+
+              <Button
+                variant="contained"
+                type="submit"
+                fullWidth
+                disabled={loading}
+                sx={{ mt: 3, py: 1.5, fontWeight: 600 }}
               >
-                Forgot Password?
-              </Link>
+                {loading ? "Signing in…" : "Sign In"}
+              </Button>
+
+              <Divider sx={{ my: 3 }}>Or continue with</Divider>
+
+              <Button
+                variant="outlined"
+                fullWidth
+                startIcon={<FcGoogle size={24} />}
+                onClick={handleGoogle}
+                sx={{
+                  textTransform: "none",
+                  py: 1.2,
+                  fontWeight: 500,
+                  borderColor: "#ccc",
+                  "&:hover": { borderColor: "#aaa" },
+                }}
+              >
+                Continue with Google
+              </Button>
             </Box>
 
-            <Button
-              variant="contained"
-              type="submit"
-              fullWidth
-              disabled={loading}
-              sx={{ mt: 3, py: 1.5, fontWeight: 600 }}
-            >
-              {loading ? "Signing in…" : "Sign In"}
-            </Button>
+            <Box textAlign="center" mt={4}>
+              <Typography variant="body2" color="text.secondary">
+                Don&apos;t have an account?{" "}
+                <Link href="/signup" underline="hover">
+                  Sign up
+                </Link>
+              </Typography>
+            </Box>
+          </Box>
+        </motion.div>
 
-            <Divider sx={{ my: 3 }}>Or continue with</Divider>
-
-            <Button
-              variant="outlined"
-              fullWidth
-              startIcon={<FcGoogle size={24} />}
-              onClick={handleGoogle}
+        {/* Illustration on the right (only on md and up) */}
+        {isMdUp && (
+          <motion.div
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 60, damping: 15 }}
+            style={{ width: "50%" }}
+          >
+            <Box
               sx={{
-                textTransform: "none",
-                py: 1.2,
-                fontWeight: 500,
-                borderColor: "#ccc",
-                "&:hover": { borderColor: "#aaa" },
+                backgroundImage: `url('/login-illustration.svg')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                minHeight: 600,
+                height: "100%",
               }}
-            >
-              Continue with Google
-            </Button>
-          </Box>
-
-          <Box textAlign="center" mt={4}>
-            <Typography variant="body2" color="text.secondary">
-              Don’t have an account?{" "}
-              <Link href="/signup" underline="hover">
-                Sign up
-              </Link>
-            </Typography>
-          </Box>
-        </Grid>
+            />
+          </motion.div>
+        )}
       </Grid>
 
       {/* Forgot Password Dialog */}

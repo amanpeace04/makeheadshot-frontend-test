@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Container, Grid, Box, Modal } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import PackagesSection from "@/components//ui/PurchaseSection";
 import { Package } from "@/components/ui/PackageCard";
 import ImageValidationModal from "@/components/ui/ImageValidationModal";

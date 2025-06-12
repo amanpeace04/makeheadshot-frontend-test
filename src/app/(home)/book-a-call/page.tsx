@@ -10,7 +10,7 @@ export default function BookCall() {
           Book a Free Consultation Call
         </h1>
         <p className="text-center text-gray-600 mb-8 text-lg">
-          Choose a time that works best for you. We'll meet on Google Meet.
+          Choose a time that works best for you. We&apos;ll meet on Google Meet.
         </p>
         <div className="w-full h-[75vh] rounded-xl overflow-hidden border border-gray-300 shadow-md">
           <iframe

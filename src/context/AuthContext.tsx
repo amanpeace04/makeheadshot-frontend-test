@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(profile);
       } catch (err) {
         // invalid token → clear & redirect
+        console.error("Failed to fetch profile:", err);
         localStorage.removeItem("token");
         router.replace("/login");
       } finally {

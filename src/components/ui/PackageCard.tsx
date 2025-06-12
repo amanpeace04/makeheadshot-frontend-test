@@ -3,15 +3,8 @@
 
 import React from "react";
 import {
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
   Button,
-  Box,
-  useTheme,
 } from "@mui/material";
-import { motion } from "framer-motion";
 
 export interface Package {
   outfits: number;
@@ -31,8 +24,7 @@ export interface PackageCardProps {
   onBuy: (pkg: Package) => void;
 }
 
-const PackageCard: React.FC<PackageCardProps> = ({ pkg, index, onBuy }) => {
-  const theme = useTheme();
+const PackageCard: React.FC<PackageCardProps> = ({ pkg, onBuy }) => {
   const priceLabel = pkg.cost;
   const isProfessional = pkg.package_name
     .toLowerCase()

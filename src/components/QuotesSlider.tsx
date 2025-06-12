@@ -111,7 +111,7 @@ const QuotesSlider: React.FC = () => {
                 className="w-full text-center absolute left-0 right-0"
               >
                 <p className="text-lg md:text-xl font-medium text-corporate-dark mb-2 px-4">
-                  "{quotes[currentQuote].text}"
+                  &quot;{quotes[currentQuote].text}&quot;
                 </p>
                 <div className="flex items-center justify-center gap-2">
                   <p className="text-corporate-blue font-semibold">

@@ -4,16 +4,12 @@
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
-  IconArrowLeft,
   IconBrandTabler,
-  IconSettings,
   IconUserBolt,
 } from "@tabler/icons-react";
-import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Dashboard } from "./Dashboard";
 import { Navbar } from "@/components/User/Header";
-import Image from "next/image";
 // import { Logo, LogoIcon } from "./Logo"; // wherever you put those
 
 interface DashboardLayoutProps {

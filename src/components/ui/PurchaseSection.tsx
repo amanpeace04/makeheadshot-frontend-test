@@ -216,7 +216,7 @@ export default function PurchaseSection() {
             </Typography>
           )}
           <Typography variant="h6" gutterBottom>
-            You've uploaded {validatedFiles.length} of {REQUIRED_IMAGES} images.
+            You&apos;ve uploaded {validatedFiles.length} of {REQUIRED_IMAGES} images.
           </Typography>
           <Box
             sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2 }}

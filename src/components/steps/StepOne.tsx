@@ -6,9 +6,6 @@ import { useRouter } from "next/navigation"; // ← next/navigation, not next/ro
 import {
   Container,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
   Grid,
   Card,
   CardActionArea,

@@ -14,25 +14,24 @@ import {
   Stepper,
   TextField,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "next/navigation";
+
 import apiHelper from "@/helpers/apiHelper";
 import {
-  ageOptions,
   genderOptions,
   bodyTypeOptions,
   eyeColorOptions,
   spectaclesOptions,
-  packageOptions,
 } from "@/constants/dropdownOptions";
+
 import {
   MultiStepFormProvider,
   useFormContext,
 } from "@/context/MultiStepFormContext";
-import { useImageValidation } from "@/context/ImageValidationContext";
-import { useSearchParams } from "next/navigation";
 
+import { useImageValidation } from "@/context/ImageValidationContext";
 import BackgroundSelection from "@/components/ui/BackgroundSelection";
 import SelectedCombinations from "@/components/ui/SelectedCombinations";
 import FinalPreview from "@/components/ui/FinalPreview";
@@ -58,7 +57,6 @@ interface PaymentValidateResponse {
 
 function InnerForm() {
   const ctx = useFormContext();
-  const theme = useTheme();
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -84,7 +82,7 @@ function InnerForm() {
             value={ctx.age}
             onChange={(e) => ctx.setAge(e.target.value)}
             sx={{ mb: 2 }}
-          ></TextField>
+          />
           <TextField
             select
             fullWidth
@@ -92,9 +90,9 @@ function InnerForm() {
             value={ctx.gender}
             onChange={(e) => ctx.setGender(e.target.value)}
           >
-            {genderOptions.map((o) => (
-              <MenuItem key={o} value={o}>
-                {o}
+            {genderOptions.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
               </MenuItem>
             ))}
           </TextField>
@@ -111,12 +109,13 @@ function InnerForm() {
             onChange={(e) => ctx.setBodyType(e.target.value)}
             sx={{ mb: 2 }}
           >
-            {bodyTypeOptions.map((o) => (
-              <MenuItem key={o} value={o}>
-                {o}
+            {bodyTypeOptions.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
               </MenuItem>
             ))}
           </TextField>
+
           <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
             <TextField
               fullWidth
@@ -133,6 +132,7 @@ function InnerForm() {
               onChange={(e) => ctx.setHeight(e.target.value)}
             />
           </Box>
+
           <Box sx={{ display: "flex", gap: 2 }}>
             <TextField
               select
@@ -142,12 +142,13 @@ function InnerForm() {
               onChange={(e) => ctx.setEyeColor(e.target.value)}
               sx={{ mb: 2 }}
             >
-              {eyeColorOptions.map((o) => (
-                <MenuItem key={o} value={o}>
-                  {o}
+              {eyeColorOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
                 </MenuItem>
               ))}
             </TextField>
+
             <TextField
               select
               fullWidth
@@ -155,9 +156,9 @@ function InnerForm() {
               value={ctx.spectacles}
               onChange={(e) => ctx.setSpectacles(e.target.value)}
             >
-              {spectaclesOptions.map((o) => (
-                <MenuItem key={o} value={o}>
-                  {o}
+              {spectaclesOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
                 </MenuItem>
               ))}
             </TextField>
@@ -170,11 +171,17 @@ function InnerForm() {
       {ctx.activeStep === 4 && <FinalPreview />}
 
       <Box
-        sx={{ display: "flex", justifyContent: "space-between", px: 3, pb: 3 }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          px: 3,
+          pb: 3,
+        }}
       >
         <Button disabled={ctx.activeStep === 0} onClick={ctx.prevStep}>
           Back
         </Button>
+
         {ctx.activeStep < steps.length - 1 ? (
           <Button
             variant="contained"
@@ -207,9 +214,8 @@ function InnerForm() {
 function FormContent() {
   const ctx = useFormContext();
   const { setPackageName } = useFormContext();
-
-  const { email } = ctx;
   const { modelName, setModelName } = useImageValidation();
+
   const searchParams = useSearchParams();
   const queryModelId = searchParams.get("modelID");
   const effectiveModelId = queryModelId || modelName;
@@ -221,27 +227,30 @@ function FormContent() {
     if (queryModelId) {
       setModelName(queryModelId);
     }
-    if (!email || !effectiveModelId) return;
-    setLoading(true);
+
+    if (!ctx.email || !effectiveModelId) return;
+
     apiHelper
       .get<PaymentValidateResponse>(
         `/api/payment/validate?email_id=${encodeURIComponent(
-          email
+          ctx.email
         )}&model_id=${encodeURIComponent(effectiveModelId)}`
       )
       .then((res) => {
         if (res.payment_found) {
           setPackageName(res.package_name);
           setError(null);
-        } else setError("No payment record found. Please contact support.");
+        } else {
+          setError("No payment record found. Please contact support.");
+        }
       })
-      .catch((e: any) =>
-        setError(e.message || "Network error during validation.")
-      )
+      .catch((err: any) => {
+        setError(err.message || "Network error during validation.");
+      })
       .finally(() => setLoading(false));
-  }, [email, modelName]);
+  }, [ctx.email, effectiveModelId]);
 
-  if (loading)
+  if (loading) {
     return (
       <Box
         sx={{
@@ -256,8 +265,9 @@ function FormContent() {
         <CircularProgress size={64} />
       </Box>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
       <Box
         sx={{
@@ -280,6 +290,7 @@ function FormContent() {
         </Button>
       </Box>
     );
+  }
 
   return (
     <Container
@@ -312,8 +323,8 @@ function FormContent() {
           ))}
         </Stepper>
 
-        {/* Content */}
-        <AnimatePresence exitBeforeEnter>
+        {/* Form Steps */}
+        <AnimatePresence mode="wait">
           <motion.div
             key={ctx.activeStep}
             initial={{ opacity: 0, y: 20 }}
@@ -329,7 +340,7 @@ function FormContent() {
   );
 }
 
-export default function MultiStepForm() {
+export default function MultiStepFormPage() {
   return (
     <MultiStepFormProvider>
       <FormContent />

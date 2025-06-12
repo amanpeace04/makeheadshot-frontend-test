@@ -26,7 +26,7 @@ export default function HeroSection() {
     <Box sx={{ py: 8, px: 4, bgcolor: "#f9f9fb" }}>
       <Grid container spacing={4} alignItems="center">
         {/* Left: Video Hero */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <motion.div initial="hidden" animate="visible" variants={slideInLeft}>
             <Box
               component="video"
@@ -47,7 +47,7 @@ export default function HeroSection() {
         </Grid>
 
         {/* Right: Promotional Content */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <motion.div
             initial="hidden"
             animate="visible"
@@ -59,8 +59,8 @@ export default function HeroSection() {
               </Typography>
               <Typography variant="body1" color="text.secondary">
                 Choose the location of your shoot and pick an outfit from a wide
-                range of options. You'll get 10 headshots per combination, to
-                make sure you get the perfect shot.
+                range of options. You&apos;ll get 10 headshots per combination,
+                to make sure you get the perfect shot.
               </Typography>
 
               {/* Thumbnail composite example */}

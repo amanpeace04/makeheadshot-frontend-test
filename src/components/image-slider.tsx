@@ -5,8 +5,6 @@ import { imagePairs } from "@/utils/image-utils";
 import Image from "next/image";
 
 const ImageSlider: React.FC = () => {
-  // Create a larger set of duplicated images to ensure smoother looping
-  const duplicatedImagePairs = [...imagePairs, ...imagePairs, ...imagePairs];
 
   // Use useEffect to ensure the animation runs smoothly
   useEffect(() => {

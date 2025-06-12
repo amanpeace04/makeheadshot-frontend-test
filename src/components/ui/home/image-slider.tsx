@@ -2,10 +2,7 @@
 import React, { useEffect } from "react";
 import { imagePairs } from "../../utils/image-utils";
 
-const ImageSlider: React.FC = () => {
-  // Create a larger set of duplicated images to ensure smoother looping
-  const duplicatedImagePairs = [...imagePairs, ...imagePairs, ...imagePairs];
-  
+const ImageSlider: React.FC = () => {  
   // Use useEffect to ensure the animation runs smoothly
   useEffect(() => {
     // Make sure animations run at 60fps
@@ -51,7 +48,7 @@ const ImageSlider: React.FC = () => {
           {/* Create three identical sections for seamless looping */}
           {[0, 1, 2].map((sectionIndex) => (
             <div key={sectionIndex} className="flex space-x-4 mr-4">
-              {imagePairs.map((pair, idx) => (
+              {imagePairs.map((pair: any, idx: any) => (
                 <div key={`section-${sectionIndex}-${idx}`} className="relative flex-shrink-0">
                   <img
                     src={pair.main}

@@ -17,7 +17,6 @@ export const CardSpotlight = ({
   spotlightColor = "rgba(10, 102, 194, 0.1)", // Corporate blue with low opacity
 }: CardSpotlightProps) => {
   const divRef = useRef<HTMLDivElement>(null);
-  const [isFocused, setIsFocused] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
 
@@ -34,12 +33,10 @@ export const CardSpotlight = ({
   };
 
   const handleMouseEnter = () => {
-    setIsFocused(true);
     setOpacity(1);
   };
 
   const handleMouseLeave = () => {
-    setIsFocused(false);
     setOpacity(0);
   };
 

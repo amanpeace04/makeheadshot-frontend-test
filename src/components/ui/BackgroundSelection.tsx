@@ -1,10 +1,9 @@
 // File: src/components/ui/BackgroundSelection.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
-  Grid,
   Card,
   CardMedia,
   CardContent,
@@ -31,7 +30,7 @@ export default function BackgroundSelection({
   selectionLimit = 10,
 }: BackgroundSelectionProps) {
   const theme = useTheme();
-  const { jobs, addJob, setJobs } = useFormContext();
+  const { jobs, addJob, setJobs, nextStep } = useFormContext();
 
   const [openBg, setOpenBg] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
@@ -202,7 +201,7 @@ export default function BackgroundSelection({
             fullWidth
             sx={{ mt: 2 }}
             disabled={jobs.length < selectionLimit}
-            onClick={() => useFormContext().nextStep()}
+            onClick={nextStep}
           >
             Continue
           </Button>

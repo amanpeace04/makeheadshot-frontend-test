@@ -1,6 +1,5 @@
 import React from "react";
 import { CardSpotlight } from "@/components/ui/home/CardSpotlight";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 const Pricing: React.FC = () => {

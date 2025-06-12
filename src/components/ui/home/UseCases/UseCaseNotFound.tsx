@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import { Container, Typography, Box } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 export default function UseCaseNotFound() {
   return (

@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Import images directly
-import ai1 from "../../assets/images/1 (2).jpg";
-import orig2 from "../../assets/images/1 (3).jpg";
-import ai2 from "../../assets/images/1 (4).jpg";
-import orig3 from "../../assets/images/1 (5).jpg";
-import ai3 from "../../assets/images/1 (6).jpg";
-import ai4 from "../../assets/images/1 (8).jpg";
-
 interface Card {
   id: string;
   title: string;
@@ -23,7 +15,7 @@ export const CardHoverEffect = ({
   items: Card[];
   className?: string;
 }) => {
-  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <div

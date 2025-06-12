@@ -1,7 +1,7 @@
 // src/components/ui/HoverBorderGradient.tsx
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react"; // ← use the 'motion' package
 import { cn } from "@/lib/utils"; // ← fixed path
 

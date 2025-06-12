@@ -24,7 +24,7 @@ export default function FinalPreview() {
   const [modalOpen, setModalOpen] = useState(false);
 
   // On validation, keep modal open so user can see results
-  const handleValidated = (success: boolean) => {
+  const handleValidated = () => {
     // validatedFiles in context are updated; do not auto-close modal
   };
 

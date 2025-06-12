@@ -1,15 +1,23 @@
 // src/app/add/page.tsx
 import { Box } from "@mui/material";
-import { ProgressBar } from "@/components/steps/ProgressBar"; // ← new
+import { ProgressBar } from "@/components/steps/ProgressBar";
 import { StepOne } from "@/components/steps/StepOne";
 import { StepTwo } from "@/components/steps/StepTwo";
 
-type Props = {
-  searchParams: { step?: string };
-};
+// Next.js 15 PageProps type - searchParams is now a Promise
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>
+}
 
-export default function AddPage({ searchParams }: Props) {
-  const stepNum = searchParams.step === "2" ? 2 : 1;
+export default async function AddPage({ searchParams }: PageProps) {
+  // Await the searchParams promise
+  const resolvedSearchParams = await searchParams;
+
+  const step = Array.isArray(resolvedSearchParams?.step)
+    ? resolvedSearchParams?.step[0]
+    : resolvedSearchParams?.step;
+
+  const stepNum = step === "2" ? 2 : 1;
   const steps = ["Who", "Package", "Upload", "Finish"];
 
   return (

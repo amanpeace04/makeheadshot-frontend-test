@@ -63,7 +63,7 @@ const Testimonials: React.FC = () => {
         <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
           What{" "}
           <span className="bg-gradient-to-r from-corporate-blue to-corporate-green bg-clip-text text-transparent">
-            they're
+            they&apos;re
           </span>{" "}
           saying
         </h2>
@@ -87,7 +87,9 @@ const Testimonials: React.FC = () => {
                   <p className="text-gray-600 text-sm">{testimonial.role}</p>
                 </div>
               </div>
-              <p className="text-gray-700 text-sm">"{testimonial.quote}"</p>
+              <p className="text-gray-700 text-sm">
+                &quot;{testimonial.quote}&quot;
+              </p>
             </div>
           ))}
         </div>

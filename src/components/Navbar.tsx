@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Logo: always visible, centered on md+ */}
-          <a
+          <Link
             href="/"
             className="flex items-center space-x-2 text-xl font-bold text-gray-900 whitespace-nowrap ml-0 md:-ml-8"
           >
@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
               🎥
             </span>
             <span>Make Headshot</span>
-          </a>
+          </Link>
 
           {/* CTA Button */}
           <Link

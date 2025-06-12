@@ -1,13 +1,18 @@
-// File: src/components/ui/SelectedCombinations.tsx
 "use client";
 
 import React from "react";
-import { Box, Paper, Typography, IconButton, Button } from "@mui/material";
+import { Box, Paper, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useFormContext } from "@/context/MultiStepFormContext";
 
 export default function SelectedCombinations() {
-  const { jobs, nextStep } = useFormContext();
+  const { jobs, setJobs } = useFormContext();
+
+  const removeJob = (index: number) => {
+    const newJobs = [...jobs];
+    newJobs.splice(index, 1);
+    setJobs(newJobs);
+  };
 
   return (
     <Box sx={{ p: 4 }}>
@@ -15,8 +20,8 @@ export default function SelectedCombinations() {
         Great choices! Ready to move on?
       </Typography>
       <Typography variant="body2" color="textSecondary" sx={{ mb: 3 }}>
-        We're ready to create your headshots now! Double check your selections
-        below then click continue.
+        We&apos;re ready to create your headshots now! Double check your
+        selections below then click continue.
       </Typography>
 
       <Paper sx={{ p: 3, borderRadius: 2, mb: 3 }}>
@@ -40,16 +45,7 @@ export default function SelectedCombinations() {
               {job.background.replace(/_/g, " ")} →{" "}
               {job.clothing.replace(/_/g, " ")}
             </Typography>
-            <IconButton
-              size="small"
-              onClick={() => {
-                // remove a single combo
-                const newJobs = [...jobs];
-                newJobs.splice(i, 1);
-                // @ts-ignore
-                useFormContext().setJobs(newJobs);
-              }}
-            >
+            <IconButton size="small" onClick={() => removeJob(i)}>
               <CloseIcon fontSize="small" />
             </IconButton>
           </Box>

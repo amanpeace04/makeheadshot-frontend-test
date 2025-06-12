@@ -90,7 +90,7 @@ const HelpCenter = () => {
                 Thank you!
               </h2>
               <p className="text-gray-800">
-                We've received your message and will get back to you soon.
+                We&apos;ve received your message and will get back to you soon.
               </p>
             </div>
           )}
