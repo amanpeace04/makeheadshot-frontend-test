@@ -128,7 +128,7 @@ export default function PreviousJobs() {
   const fetchJobStatus = async (modelId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/status/${modelId}`,
+        `${process.env.NEXT_PUBLIC_APP_API_URL}/api/status/${modelId}`,
         {
           headers: {
             "X-API-Key": API_KEY,
