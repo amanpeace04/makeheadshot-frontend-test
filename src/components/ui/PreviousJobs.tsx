@@ -141,7 +141,6 @@ export default function PreviousJobs() {
       }
 
       const statusData: JobStatusData = await response.json();
-
       // Update the specific job's status
       setJobs((prevJobs) =>
         prevJobs.map((job) =>
@@ -171,7 +170,7 @@ export default function PreviousJobs() {
     try {
       setImagesLoading(true);
       const response = await fetch(
-        `http://localhost:8000/api/images/${modelId}?presigned=true`,
+        `${process.env.NEXT_PUBLIC_APP_API_URL}/api/images/${modelId}?presigned=true`,
         {
           headers: {
             "X-API-Key": API_KEY,
