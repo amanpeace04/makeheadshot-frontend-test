@@ -1,4 +1,4 @@
-name: Deploy Frontend to EC2
+name: Frontend Deploy - Feature Branch
 
 on:
   push:
@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          host: 13.233.8.81
+          username: ubuntu
           port: 22
+          key: ${{ secrets.FRONTEND_KEY }}
           script: |
             cd /home/ubuntu/Makeheadshot-Frontend-Final
             git fetch origin
