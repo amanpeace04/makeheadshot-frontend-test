@@ -1,9 +1,9 @@
-name: Frontend CI/CD (Develop)
+name: Frontend CI/CD (mak-2-ap)
 
 on:
   push:
     branches:
-      - develop
+      - feature/mak-2-ap   # Trigger on push to this branch
 
 jobs:
   deploy:
@@ -33,7 +33,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /var/www/makeheadshot-frontend
-            git pull origin develop
+            git pull origin feature/mak-2-ap
             npm install
             npm run build
             pm2 restart frontend || pm2 start npm --name "frontend" -- start
