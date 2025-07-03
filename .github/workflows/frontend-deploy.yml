@@ -1,0 +1,32 @@
+name: Deploy Frontend to EC2
+
+on:
+  push:
+    branches:
+      - feature/mak-2-ap
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: 22
+          script: |
+            cd /home/ubuntu/Makeheadshot-Frontend-Final
+            git fetch origin
+            git checkout feature/mak-2-ap
+            git pull --no-rebase origin feature/mak-2-ap
+            npm install
+            npm run build
+            pm2 delete frontend || true
+            pm2 start npm --name "frontend" -- start
+            pm2 save
