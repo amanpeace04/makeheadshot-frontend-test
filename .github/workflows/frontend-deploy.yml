@@ -1,4 +1,4 @@
-name: Frontend Deployment (Feature Branch)
+name: Frontend Deployment (Docker - Feature Branch)
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy Frontend to EC2
+      - name: Deploy Frontend via Docker
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -24,9 +24,10 @@ jobs:
             cd /root/Makeheadshot-Frontend-Final
             git fetch origin
             git checkout feature/mak-2-ap
-            git pull --no-rebase origin feature/mak-2-ap
-            npm install
-            npm run build
-            pm2 delete frontend || true
-            pm2 start npm --name "frontend" -- start
-            pm2 save
+            git pull origin feature/mak-2-ap
+
+            # Docker commands
+            docker build -t makeheadshot-frontend .
+            docker stop makeheadshot-frontend || true
+            docker rm makeheadshot-frontend || true
+            docker run -d --name makeheadshot-frontend -p 31174:3000 makeheadshot-frontend
